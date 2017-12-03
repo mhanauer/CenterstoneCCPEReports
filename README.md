@@ -649,7 +649,8 @@ write.csv(quarterFigure1Race, 'quarterFigure1Race.csv', row.names = FALSE)
 # Need to find the data for these questions. Break them out by baseline, 3 month, and 6 month
 #GPRA HIV knowledge sum them together, get means and see if there is a difference between them.  Not enough data to look at all three.  Use McNair test, but need to get the counts of how is right and wrong for each group.
 
-figure2 = data.frame(gpraAdultAll$HIV_SICK_N.x, gpraAdultAll$HIV_SICK_N.y, gpraAdultAll$HIV_SICK_N, gpraAdultAll$HIV_GAYSEX_N.x, gpraAdultAll$HIV_GAYSEX_N.y, gpraAdultAll$HIV_GAYSEX_N, gpraAdultAll$HIV_BCPILL_N.x, gpraAdultAll$HIV_BCPILL_N.y, gpraAdultAll$HIV_BCPILL_N, gpraAdultAll$HIV_DRGS_N.x, gpraAdultAll$HIV_DRGS_N.y, gpraAdultAll$HIV_DRGS_N, gpraAdultAll$HIV_CURE_N.x, gpraAdultAll$HIV_CURE_N.y, gpraAdultAll$HIV_CURE_N) 
+figure2 = data.frame(gpraAdultAll$PARTID, gpraAdultAll$HIV_SICK_N.x, gpraAdultAll$HIV_SICK_N.y, gpraAdultAll$HIV_SICK_N, gpraAdultAll$HIV_GAYSEX_N.x, gpraAdultAll$HIV_GAYSEX_N.y, gpraAdultAll$HIV_GAYSEX_N, gpraAdultAll$HIV_BCPILL_N.x, gpraAdultAll$HIV_BCPILL_N.y, gpraAdultAll$HIV_BCPILL_N, gpraAdultAll$HIV_DRGS_N.x, gpraAdultAll$HIV_DRGS_N.y, gpraAdultAll$HIV_DRGS_N, gpraAdultAll$HIV_CURE_N.x, gpraAdultAll$HIV_CURE_N.y, gpraAdultAll$HIV_CURE_N) 
+
 
 summary(figure2)
 
@@ -658,55 +659,113 @@ summary(figure2)
 # Need to change factors.  Also there are some 2's that should not be there.  97's should be incorrect, because if you don't know the answer then you don't know the correct answer.
 # Need to add the one and zero, because you making everything that is not defined NA.  Need to have NA's in parthensis to not turn everything into NAs
 # Need to have someone go back and get rid of 2's they should not be there.
+# Don't know if fine, because you are grabbing the ones where don't know would be considered incorrect and where 0 is an incorrect answer.  Try subsetting at the end to get rid of the twos.
+# In True equals one the don't knows equal 0, because they will be wrong
+HIVTrueEqualsOne = figure2[c(11:16)]
+head(HIVTrueEqualsOne)
+HIVTrueEqualsOneTest = figure2[c(11:16)]
+write.csv(HIVTrueEqualsOneTest, "HIVTrueEqualsOneTest.csv", row.names = FALSE)
+HIVTrueEqualsOne = data.frame(apply(HIVTrueEqualsOne, 2, function(x){ifelse(x == "True", 1, ifelse(x == "False", 0, ifelse(x == "Don't know",0, x)))}))
+head(HIVTrueEqualsOne)
+write.csv(HIVTrueEqualsOne, "HIVTrueEqualsOne.csv", row.names = FALSE)
+HIVTrueEqualsOne = read.csv("HIVTrueEqualsOne.csv", header = TRUE)
+HIVTrueEqualsOne = data.frame(apply(HIVTrueEqualsOne, 2, function(x){ifelse(x == 2, NA, ifelse(x == 97, 0, x))}))
+write.csv(HIVTrueEqualsOne, "HIVTrueEqualsOne.csv", row.names = FALSE)
+# The above are correct
+# Need to change factors.  Also there are some 2's that should not be there.  Take an average for baseline 3month, and 6month.  Here I am saying that 0 is the correct reponse so it is getting changed to 1.
+HIVFalseEqualsOne = figure2[c(2:10)]
+HIVFalseEqualsOneTest = figure2[c(2:10)]
+write.csv(HIVFalseEqualsOneTest, "HIVFalseEqualsOneTest.csv", row.names = FALSE)
 
-figure2 = data.frame(apply(figure2, 2, function(x){ifelse(x == "True", 1, ifelse(x == "False", 0, ifelse(x == "Don't know", 0,ifelse(x == 97, 0, ifelse(x == 1, 1, ifelse(x == 0, 0, ifelse(x == "NA",NA, ifelse(x == 2, "NA", x))))))))}))
-summary(figure2)
-test = figure2[60:80,]
-write.csv(test, "test.csv", row.names = FALSE) 
+# Keep trues and falses the same i.e. True =1, because you are going to reverse everything at the next point.
+HIVFalseEqualsOne = data.frame(apply(HIVFalseEqualsOne, 2, function(x){ifelse(x == "Don't know", 1, ifelse(x == "True", 1, ifelse(x == "False", 0, x)))}))
+summary(HIVFalseEqualsOneTest)
+write.csv(HIVFalseEqualsOne, "HIVFalseEqualsOne.csv", row.names = FALSE)
+HIVFalseEqualsOne = read.csv("HIVFalseEqualsOne.csv", header = TRUE)
 
-# Need to change factors.  Also there are some 2's that should not be there.  Take an average for baseline 3month, and 6month
-HIVFalseEqualsOne = figure2[c(1:9)]
-HIVFalseEqualsOne = data.frame(apply(HIVFalseEqualsOne, 2, function(x){ifelse(x == 0, 1, ifelse(x == 97,0, x))}))
-figure2 = figure2[c(10:15)]
+# Need's 1's to 0, because 1 is wrong and 0's to equal 1's, because 0's are right.  Also, get 
+HIVFalseEqualsOne = data.frame(apply(HIVFalseEqualsOne, 2, function(x){ifelse(x == 0, 1, ifelse(x == 1, 0, ifelse(x == 97, NA,  x)))}))
+write.csv(HIVFalseEqualsOne, "HIVFalseEqualsOne.csv", row.names = FALSE)
+
+# Not picking up the zeros may need to change 
+
 setwd("C:/Users/Matthew.Hanauer/Desktop")
-figure2 = data.frame(HIVFalseEqualsOne, figure2)
+figure2 = data.frame(figure2$gpraAdultAll.PARTID, HIVTrueEqualsOne, HIVFalseEqualsOne)
 write.csv(figure2, "figure2.csv", row.names = FALSE)
 figure2 = read.csv("figure2.csv", header = TRUE)
+summary(figure2)
+# Getting rid of the twos, because I couldn't earlier.
+figure2 = data.frame(apply(figure2, 2, function(x){ifelse(x == 2, NA, x)}))
 
-# Now I need to sum them for each of their time frames.  Need to get them into the baseline, 3 month and 6 month versions
 
-baseline = data.frame(figure2$gpraAdultAll.HIV_SICK_N.x, figure2$gpraAdultAll.HIV_GAYSEX_N.x, figure2$gpraAdultAll.HIV_BCPILL_N.x, figure2$gpraAdultAll.HIV_DRGS_N.x, figure2$gpraAdultAll.HIV_CURE_N.x) 
+summary(figure2)
+head(figure2)
+# Now I need to sum them for each of their time frames.  Need to get them into the baseline, 3 month and 6 month versions.  So the average of the quetsions that they did answer.
+
+baseline = data.frame(figure2$gpraAdultAll.HIV_DRGS_N.x, figure2$gpraAdultAll.HIV_CURE_N.x, figure2$gpraAdultAll.HIV_SICK_N.x, figure2$gpraAdultAll.HIV_GAYSEX_N.x, figure2$gpraAdultAll.HIV_BCPILL_N.x) 
+write.csv(baseline, "baseline.csv", row.names = FALSE)
 baseline = data.frame(apply(baseline, 1, mean, na.rm = TRUE))
+head(baseline)
 
 
 Month3 = data.frame(figure2$gpraAdultAll.HIV_SICK_N.y, figure2$gpraAdultAll.HIV_GAYSEX_N.y, figure2$gpraAdultAll.HIV_BCPILL_N.y, figure2$gpraAdultAll.HIV_DRGS_N.y, figure2$gpraAdultAll.HIV_CURE_N.y) 
 Month3 = data.frame(apply(Month3, 1, mean, na.rm = TRUE))
+head(Month3)
 
 Month6 =data.frame(figure2$gpraAdultAll.HIV_SICK_N, figure2$gpraAdultAll.HIV_GAYSEX_N, figure2$gpraAdultAll.HIV_BCPILL_N, figure2$gpraAdultAll.HIV_DRGS_N, figure2$gpraAdultAll.HIV_CURE_N) 
 Month6 = data.frame(apply(Month6, 1, mean, na.rm = TRUE))
+head(Month6)
 
-figure2 = data.frame(baseline, Month3, Month6) figure2 = data.frame(na.omit(figure2)) dim(figure2)
-
-
-
-
-
-
-# Maybe try from baseline to month3 for each
-HIV_SICK_BaseTo3 = data.frame(HIV_SICK_N.x = figure2$gpraAdultAll.HIV_SICK_N.x, figure2$gpraAdultAll.HIV_SICK_N)
-summary(HIV_SICK_BaseTo3)
-HIV_SICK_BaseTo3 = data.frame(na.omit(HIV_SICK_BaseTo3))
-write.csv(HIV_SICK_BaseTo3, "HIV_SICK_BaseTo3.csv", row.names = FALSE)
-HIV_SICK_BaseTo3 = read.csv("HIV_SICK_BaseTo3.csv", header = TRUE)
-HIV_SICK_BaseTo3Test = data.frame(na.omit(HIV_SICK_BaseTo3))
-dim(HIV_SICK_BaseTo3Test)
+figure2 = data.frame(baseline, Month3, Month6)
+colnames(figure2) = c("BaselineHIVScore", "Month3HIVScore", "Month6HIVScore")
 head(figure2)
+# It is right here, because person two has a 100% which is correct. 
+figure2BaseTo3 = data.frame(BaselineHIVScore = figure2$BaselineHIVScore,Month3HIVScore  = figure2$Month3HIVScore)
+figure2BaseTo3 = data.frame(na.omit(figure2BaseTo3)) 
+dim(figure2BaseTo3)
+wilcox.test(figure2BaseTo3$Month3HIVScore, figure2BaseTo3$BaselineHIVScore , paired = TRUE, correct=FALSE, alternative = c("greater"))
+Figure2BaseTo3ColMeans = data.frame(Means = colMeans(figure2BaseTo3))
+Figure2BaseTo3ColMeans = round(Figure2BaseTo3ColMeans,2)
+write.csv(Figure2BaseTo3ColMeans, "Figure2BaseTo3ColMeans.csv")
+
+figure2BaseTo6 = data.frame(figure2$BaselineHIVScore, figure2$Month6HIVScore)
+figure2BaseTo6 = data.frame(na.omit(figure2BaseTo6)) 
+dim(figure2BaseTo6)
+
+# Research more about this test.
+wilcox.test(figure2BaseTo6$figure2.Month6HIVScore, figure2BaseTo6$figure2.BaselineHIVScore , paired = TRUE, correct=FALSE, alternative = c("greater"))
+Figure2BaseTo6ColMeans = data.frame(Means = colMeans(figure2BaseTo6))
+Figure2BaseTo6ColMeans = round(Figure2BaseTo6ColMeans,2)
+write.csv(Figure2BaseTo6ColMeans, "Figure2BaseTo6ColMeans.csv")
 
 #dim(figure2)
 # Right now when you delete missing data, you have no data, which means that we have zero people who completed all five questions across all three time points.
 # To do the McNar test, I am ok, because we are only including people with data.  I need to put it in a format with the counts of 1's and zeros for base and 3 month or six month
 
-### Table 2 #########################################################################################################
+### Figure 5  #########################################################################################################
+# Grab all data, change to numeric values, conduct paired wilxcon test for all of them with baseline to 3 months then baseline to 6 months.  Make a nice table
+figure5Month6 = data.frame(gpraAdultAll$CIG30D, gpraAdultAll$TOB30D , gpraAdultAll$VAP30D, gpraAdultAll$ALC30D , gpraAdultAll$BINGE530D, gpraAdultAll$MJ30D, gpraAdultAll$ILL30D, gpraAdultAll$RX30D)
 
+figure5Baseline = data.frame(gpraAdultAll$CIG30D.x, gpraAdultAll$TOB30D.x, gpraAdultAll$VAP30D.x, gpraAdultAll$ALC30D.x, gpraAdultAll$BINGE530D.x, gpraAdultAll$MJ30D.x, gpraAdultAll$ILL30D.x, gpraAdultAll$RX30D.x)
+figure5BaselineMeans = round(data.frame(apply(figure5Baseline,  2, mean, na.rm = TRUE)),0)
+colnames(figure5BaselineMeans) = c("Mean number of days")
+figure5BaselineMeans
+
+figure5Month3 = data.frame(gpraAdultAll$CIG30D.y, gpraAdultAll$TOB30D.y, gpraAdultAll$VAP30D.y, gpraAdultAll$ALC30D.y, gpraAdultAll$BINGE530D.y, gpraAdultAll$MJ30D.y, gpraAdultAll$ILL30D.y, gpraAdultAll$RX30D.y)
+figure5Baseline
+# Need to get rid of the 98 and 97
+figure5BaseMonth3 = data.frame(figure5Baseline, figure5Month3)
+figure5BaseMonth3 = data.frame(apply(figure5BaseMonth3, 2, function(x){ifelse(x == 97, NA, ifelse(x == 98, NA, x))}))
+figure5BaseMonth3 = data.frame(na.omit(figure5BaseMonth3))
+dim(figure5BaseMonth3)
+
+wilcox.test(figure5BaseMonth3$gpraAdultAll.CIG30D.y,figure5BaseMonth3$gpraAdultAll.CIG30D.x , paired = TRUE, correct=FALSE, alternative = c("less"))
+figure5BaseMonth3Means = data.frame(apply(figure5BaseMonth3, 2, mean)) 
+figure5BaseMonth3Means
+
+write.csv(figure5, "figure5.csv", row.names = FALSE)
+figure5 = read.csv("figure5.csv", header= TRUE)
+
+#as.factor(figure5$gpraAdultAll.CIG30D.x) This changes it to a correct factor.
 
 ## Figure 5 #############################################################################################################
