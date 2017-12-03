@@ -647,37 +647,64 @@ write.csv(quarterFigure1Race, 'quarterFigure1Race.csv', row.names = FALSE)
 
 #### Figure 2 HIV/AIDS Knowledge of Adult Participants: Percent of Participants with the Correct Answer ##########################
 # Need to find the data for these questions. Break them out by baseline, 3 month, and 6 month
-#GPRA HIV knowledge sum them together, get means and see if there is a difference between them.
+#GPRA HIV knowledge sum them together, get means and see if there is a difference between them.  Not enough data to look at all three.  Use McNair test, but need to get the counts of how is right and wrong for each group.
 
 figure2 = data.frame(gpraAdultAll$HIV_SICK_N.x, gpraAdultAll$HIV_SICK_N.y, gpraAdultAll$HIV_SICK_N, gpraAdultAll$HIV_GAYSEX_N.x, gpraAdultAll$HIV_GAYSEX_N.y, gpraAdultAll$HIV_GAYSEX_N, gpraAdultAll$HIV_BCPILL_N.x, gpraAdultAll$HIV_BCPILL_N.y, gpraAdultAll$HIV_BCPILL_N, gpraAdultAll$HIV_DRGS_N.x, gpraAdultAll$HIV_DRGS_N.y, gpraAdultAll$HIV_DRGS_N, gpraAdultAll$HIV_CURE_N.x, gpraAdultAll$HIV_CURE_N.y, gpraAdultAll$HIV_CURE_N) 
-# Now need to get the answers that are correct so change them where 1 equals correct and 0 equals incorrect
-# Sick 0 is 1, else zero or NA, gay 0 is 1 else zero, BCP 0 is 1, all others leave alone
-# Need to change factors.  Also there are some 2's that should not be there.
-HIVFalseEqualsOne = figure2[c(1:9)]
 
-figure2 = data.frame(apply(figure2, 2, function(x){ifelse(x == "True", 1, ifelse(x == "False", 0, ifelse(x == "Don't know", NA,ifelse(x == 97, NA, NA))))}))
 summary(figure2)
 
-# Need to change factors.  Also there are some 2's that should not be there.
+# Now need to get the answers that are correct so change them where 1 equals correct and 0 equals incorrect
+# Sick 0 is 1, else zero or NA, gay 0 is 1 else zero, BCP 0 is 1, all others leave alone
+# Need to change factors.  Also there are some 2's that should not be there.  97's should be incorrect, because if you don't know the answer then you don't know the correct answer.
+# Need to add the one and zero, because you making everything that is not defined NA.  Need to have NA's in parthensis to not turn everything into NAs
+# Need to have someone go back and get rid of 2's they should not be there.
+
+figure2 = data.frame(apply(figure2, 2, function(x){ifelse(x == "True", 1, ifelse(x == "False", 0, ifelse(x == "Don't know", 0,ifelse(x == 97, 0, ifelse(x == 1, 1, ifelse(x == 0, 0, ifelse(x == "NA",NA, ifelse(x == 2, "NA", x))))))))}))
+summary(figure2)
+test = figure2[60:80,]
+write.csv(test, "test.csv", row.names = FALSE) 
+
+# Need to change factors.  Also there are some 2's that should not be there.  Take an average for baseline 3month, and 6month
 HIVFalseEqualsOne = figure2[c(1:9)]
-HIVFalseEqualsOne = data.frame(apply(HIVFalseEqualsOne, 2, function(x){ifelse(x == 0, 1, x)}))
+HIVFalseEqualsOne = data.frame(apply(HIVFalseEqualsOne, 2, function(x){ifelse(x == 0, 1, ifelse(x == 97,0, x))}))
 figure2 = figure2[c(10:15)]
+setwd("C:/Users/Matthew.Hanauer/Desktop")
 figure2 = data.frame(HIVFalseEqualsOne, figure2)
-head(figure2)
+write.csv(figure2, "figure2.csv", row.names = FALSE)
+figure2 = read.csv("figure2.csv", header = TRUE)
+
 # Now I need to sum them for each of their time frames.  Need to get them into the baseline, 3 month and 6 month versions
-baseline = data.frame(figure2$gpraAdultAll.HIV_SICK_N.x, figure2$gpraAdultAll.HIV_GAYSEX_N.x, figure2$gpraAdultAll.HIV_BCPILL_N.x, figure2$gpraAdultAll.HIV_DRGS_N.x, figure2$gpraAdultAll.HIV_CURE_N.x)
-#baseline = data.frame(apply(baseline, 1, sum, na.rm = TRUE))
 
-Month3 = data.frame(figure2$gpraAdultAll.HIV_SICK_N.y, figure2$gpraAdultAll.HIV_GAYSEX_N.y, figure2$gpraAdultAll.HIV_BCPILL_N.y, figure2$gpraAdultAll.HIV_DRGS_N.y, figure2$gpraAdultAll.HIV_CURE_N.y)
-#Month3 = data.frame(apply(Month3, 1, sum, na.rm = TRUE))
+baseline = data.frame(figure2$gpraAdultAll.HIV_SICK_N.x, figure2$gpraAdultAll.HIV_GAYSEX_N.x, figure2$gpraAdultAll.HIV_BCPILL_N.x, figure2$gpraAdultAll.HIV_DRGS_N.x, figure2$gpraAdultAll.HIV_CURE_N.x) 
+baseline = data.frame(apply(baseline, 1, mean, na.rm = TRUE))
 
 
-Month6 =data.frame(figure2$gpraAdultAll.HIV_SICK_N, figure2$gpraAdultAll.HIV_GAYSEX_N, figure2$gpraAdultAll.HIV_BCPILL_N, figure2$gpraAdultAll.HIV_DRGS_N, figure2$gpraAdultAll.HIV_CURE_N)
-#Month6 = data.frame(apply(Month6, 1, sum, na.rm = TRUE))
+Month3 = data.frame(figure2$gpraAdultAll.HIV_SICK_N.y, figure2$gpraAdultAll.HIV_GAYSEX_N.y, figure2$gpraAdultAll.HIV_BCPILL_N.y, figure2$gpraAdultAll.HIV_DRGS_N.y, figure2$gpraAdultAll.HIV_CURE_N.y) 
+Month3 = data.frame(apply(Month3, 1, mean, na.rm = TRUE))
 
-figure2 = data.frame(baseline, Month3, Month6)
-figure2 = data.frame(na.omit(figure2))
-dim(figure2)
+Month6 =data.frame(figure2$gpraAdultAll.HIV_SICK_N, figure2$gpraAdultAll.HIV_GAYSEX_N, figure2$gpraAdultAll.HIV_BCPILL_N, figure2$gpraAdultAll.HIV_DRGS_N, figure2$gpraAdultAll.HIV_CURE_N) 
+Month6 = data.frame(apply(Month6, 1, mean, na.rm = TRUE))
+
+figure2 = data.frame(baseline, Month3, Month6) figure2 = data.frame(na.omit(figure2)) dim(figure2)
+
+
+
+
+
+
+# Maybe try from baseline to month3 for each
+HIV_SICK_BaseTo3 = data.frame(HIV_SICK_N.x = figure2$gpraAdultAll.HIV_SICK_N.x, figure2$gpraAdultAll.HIV_SICK_N)
+summary(HIV_SICK_BaseTo3)
+HIV_SICK_BaseTo3 = data.frame(na.omit(HIV_SICK_BaseTo3))
+write.csv(HIV_SICK_BaseTo3, "HIV_SICK_BaseTo3.csv", row.names = FALSE)
+HIV_SICK_BaseTo3 = read.csv("HIV_SICK_BaseTo3.csv", header = TRUE)
+HIV_SICK_BaseTo3Test = data.frame(na.omit(HIV_SICK_BaseTo3))
+dim(HIV_SICK_BaseTo3Test)
+head(figure2)
+
+#dim(figure2)
+# Right now when you delete missing data, you have no data, which means that we have zero people who completed all five questions across all three time points.
+# To do the McNar test, I am ok, because we are only including people with data.  I need to put it in a format with the counts of 1's and zeros for base and 3 month or six month
 
 ### Table 2 #########################################################################################################
 
