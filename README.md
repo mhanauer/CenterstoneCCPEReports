@@ -114,13 +114,136 @@ RapidAdult = data.frame(subset(InternAdult, gpraAdultAll.INTERVENTION_A.x ==78 |
 RapidAdult = dim(RapidAdult)
 RapidAdult = RapidAdult[1]
 totalHIVTesting = data.frame(RapidAdult)
+wilcox.test(Goal3ObjectiveA$gpraAdultAll.KNOW_SA.y, Goal3ObjectiveA$gpraAdultAll.KNOW_SA.x , paired = TRUE, alternative  =c("greater"))
 colnames(totalHIVTesting) = c("Total HIV Tested")
 
 ################## Goal 3 Objective A #############################################################
 # Create an average score across the five scores.  Grabe KNOW_SA, because Would you know where to go near where you live to see a health care professoinal regarding a drug or alcohol problem?
 ##### Overall #####
-Goal3ObjectiveA =  data.frame(gpraAdultAll$KNOW_SA.x, gpraAdultAll$KNOW_SA.y, gpraAdultAll$KNOW_SA.x)
-Goal3ObjectiveA
-Goal3ObjectiveA = data.frame(apply(Goal3ObjectiveA, 2, function(x){ifelse(x == 98, NA, x)}))
-install.packages("plyr")
-count(Goal3ObjectiveA$gpraAdultAll.KNOW_SA.x)
+Goal3ObjectiveA =  data.frame(gpraAdultAll$KNOW_SA.x, gpraAdultAll$KNOW_SA.y, gpraAdultAll$KNOW_SA)
+
+Goal3ObjectiveA = data.frame(apply(Goal3ObjectiveA, 2, function(x){ifelse(x == 98, NA, ifelse(x == 2, NA, x))}))
+setwd("C:/Users/Matthew.Hanauer/Desktop")
+write.csv(Goal3ObjectiveA , "Goal3ObjectiveA.csv", row.names = FALSE)
+Goal3ObjectiveA  = data.frame(read.csv("Goal3ObjectiveA.csv", header = TRUE))
+head(Goal3ObjectiveA)
+
+Goal3ObjectiveABaseMonth3 = data.frame(Goal3ObjectiveA$gpraAdultAll.KNOW_SA.x, Goal3ObjectiveA$gpraAdultAll.KNOW_SA.y)
+Goal3ObjectiveABaseMonth3 = na.omit(Goal3ObjectiveABaseMonth3)
+Goal3ObjectiveABaseMonth3 = data.frame(Goal3ObjectiveABaseMonth3)
+## Here is the number of people that completed both
+dim(Goal3ObjectiveABaseMonth3)
+head(Goal3ObjectiveABaseMonth3)
+library(stats)
+## Just do Wilcox test for now get McNemar's Test later need to sum the 1 and 0's do baseline versus 3 and 3 months versus 6 months
+
+wilcox.test(Goal3ObjectiveABaseMonth3$Goal3ObjectiveA.gpraAdultAll.KNOW_SA.y, Goal3ObjectiveABaseMonth3$Goal3ObjectiveA.gpraAdultAll.KNOW_SA.x, paired = TRUE, alternative  =c("greater"))
+colMeans(Goal3ObjectiveABaseMonth3)
+
+### Now get the numbers for Baseline versus 6
+Goal3ObjectiveAMonth3Month6 = data.frame(Goal3ObjectiveA$gpraAdultAll.KNOW_SA.x, Goal3ObjectiveA$gpraAdultAll.KNOW_SA)
+Goal3ObjectiveAMonth3Month6 = na.omit(Goal3ObjectiveAMonth3Month6)
+Goal3ObjectiveAMonth3Month6 = data.frame(Goal3ObjectiveAMonth3Month6)
+## Here is the number of people that completed both
+dim(Goal3ObjectiveAMonth3Month6)
+head(Goal3ObjectiveAMonth3Month6)
+
+wilcox.test(Goal3ObjectiveAMonth3Month6$Goal3ObjectiveA.gpraAdultAll.KNOW_SA, Goal3ObjectiveAMonth3Month6$Goal3ObjectiveA.gpraAdultAll.KNOW_SA.x, paired = TRUE, alternative  =c("greater"))# Now see if you can get the percentage difference
+colMeans(Goal3ObjectiveAMonth3Month6)
+
+########## Goal 3 Objective B | Increase knowledge about HIV and VH by 20%.  KNOW_HIV #########################################################
+
+Goal3ObjectiveB =  data.frame(gpraAdultAll$KNOW_HIV.x, gpraAdultAll$KNOW_HIV.y, gpraAdultAll$KNOW_HIV)
+
+Goal3ObjectiveB = data.frame(apply(Goal3ObjectiveB, 2, function(x){ifelse(x == 98, NA, ifelse(x == 2, NA, x))}))
+setwd("C:/Users/Matthew.Hanauer/Desktop")
+write.csv(Goal3ObjectiveB , "Goal3ObjectiveB.csv", row.names = FALSE)
+Goal3ObjectiveB  = data.frame(read.csv("Goal3ObjectiveB.csv", header = TRUE))
+head(Goal3ObjectiveB)
+
+Goal3ObjectiveBBaseMonth3 = data.frame(Goal3ObjectiveB$gpraAdultAll.KNOW_HIV.x, Goal3ObjectiveB$gpraAdultAll.KNOW_HIV.y)
+Goal3ObjectiveBBaseMonth3 = na.omit(Goal3ObjectiveBBaseMonth3)
+Goal3ObjectiveBBaseMonth3 = data.frame(Goal3ObjectiveBBaseMonth3)
+## Here is the number of people that completed both
+dim(Goal3ObjectiveBBaseMonth3)
+head(Goal3ObjectiveBBaseMonth3)
+library(stats)
+## Just do Wilcox test for now get McNemar's Test later need to sum the 1 and 0's do baseline versus 3 and 3 months versus 6 months
+
+wilcox.test(Goal3ObjectiveBBaseMonth3$Goal3ObjectiveB.gpraAdultAll.KNOW_HIV.y, Goal3ObjectiveBBaseMonth3$Goal3ObjectiveB.gpraAdultAll.KNOW_HIV.x, paired = TRUE, alternative  =c("greater"))
+
+### Now get the numbers for Baseline versus 6
+Goal3ObjectiveBMonth3Month6 = data.frame(Goal3ObjectiveB$gpraAdultAll.KNOW_HIV.x, Goal3ObjectiveB$gpraAdultAll.KNOW_HIV)
+Goal3ObjectiveBMonth3Month6 = na.omit(Goal3ObjectiveBMonth3Month6)
+Goal3ObjectiveBMonth3Month6 = data.frame(Goal3ObjectiveBMonth3Month6)
+## Here is the number of people that completed both
+dim(Goal3ObjectiveBMonth3Month6)
+head(Goal3ObjectiveBMonth3Month6)
+wilcox.test(Goal3ObjectiveBMonth3Month6$Goal3ObjectiveB.gpraAdultAll.KNOW_HIV, Goal3ObjectiveBMonth3Month6$Goal3ObjectiveB.gpraAdultAll.KNOW_HIV.x, paired = TRUE, alternative  =c("greater"))
+colMeans(Goal3ObjectiveBMonth3Month6 , na.rm = TRUE)
+
+##### Goal 3 Objective C RSKCIG, RSKMJ, RSKALC create a total compoiste scores ##### ##### ##### ##### ##### ##### ##### ##### ##### ##### #####  
+Goal3ObjectiveC = data.frame(gpraAdultAll$RSKCIG.x, gpraAdultAll$RSKCIG.y, gpraAdultAll$RSKCIG, gpraAdultAll$RSKMJ.x, gpraAdultAll$RSKMJ.y, gpraAdultAll$RSKMJ, gpraAdultAll$RSKALC.x, gpraAdultAll$RSKALC.y, gpraAdultAll$RSKALC)
+head(Goal3ObjectiveC)
+Goal3ObjectiveC  = data.frame(apply(Goal3ObjectiveC, 2, function(x){ifelse(x == 98, NA, ifelse(x == 97, NA, x))}))
+head(Goal3ObjectiveC)
+
+Goal3ObjectiveCBaseMonth3= data.frame(Goal3ObjectiveC$gpraAdultAll.RSKCIG.x, Goal3ObjectiveC$gpraAdultAll.RSKCIG.y, Goal3ObjectiveC$gpraAdultAll.RSKMJ.x, Goal3ObjectiveC$gpraAdultAll.RSKMJ.y, Goal3ObjectiveC$gpraAdultAll.RSKALC.x, Goal3ObjectiveC$gpraAdultAll.RSKALC.y)
+head(Goal3ObjectiveCBaseMonth3) 
+## Filter out NA's, then split apart for the summing then bring back together.
+Goal3ObjectiveCBaseMonth3  = na.omit(Goal3ObjectiveCBaseMonth3)
+Goal3ObjectiveCBaseMonth3  = data.frame(Goal3ObjectiveCBaseMonth3)
+head(Goal3ObjectiveCBaseMonth3)
+
+Goal3ObjectiveCBase = data.frame(Goal3ObjectiveCBaseMonth3$Goal3ObjectiveC.gpraAdultAll.RSKCIG.x, Goal3ObjectiveCBaseMonth3$Goal3ObjectiveC.gpraAdultAll.RSKMJ.x, Goal3ObjectiveCBaseMonth3$Goal3ObjectiveC.gpraAdultAll.RSKALC.x)
+head(Goal3ObjectiveCBase)
+Goal3ObjectiveCBase = data.frame(apply(Goal3ObjectiveCBase, 1, sum, na.rm = TRUE))
+colnames(Goal3ObjectiveCBase ) = c("SAHarmBase")
+head(Goal3ObjectiveCBase)
+dim(Goal3ObjectiveCBase)
+
+Goal3ObjectiveCMonth3 = data.frame(Goal3ObjectiveCBaseMonth3$Goal3ObjectiveC.gpraAdultAll.RSKCIG.y, Goal3ObjectiveCBaseMonth3$Goal3ObjectiveC.gpraAdultAll.RSKMJ.y, Goal3ObjectiveCBaseMonth3$Goal3ObjectiveC.gpraAdultAll.RSKALC.y)
+head(Goal3ObjectiveCMonth3)
+Goal3ObjectiveCMonth3 = data.frame(apply(Goal3ObjectiveCMonth3, 1, sum, na.rm = TRUE))
+colnames(Goal3ObjectiveCMonth3 ) = c("SAHarmMonth3")
+head(Goal3ObjectiveCMonth3)
+dim(Goal3ObjectiveCMonth3)
+
+Goal3ObjectiveCBaseMonth3 = data.frame(Goal3ObjectiveCBase, Goal3ObjectiveCMonth3)
+head(Goal3ObjectiveCBaseMonth3)
+wilcox.test(Goal3ObjectiveCMonth3$SAHarmMonth3, Goal3ObjectiveCBase$SAHarmBase, paired = TRUE, alternative = c("greater"))
+colMeans(Goal3ObjectiveCBaseMonth3)
+## Repeat this process for Baseline and Month6
+
+Goal3ObjectiveCBaseMonth6= data.frame(Goal3ObjectiveC$gpraAdultAll.RSKCIG.x, Goal3ObjectiveC$gpraAdultAll.RSKCIG, Goal3ObjectiveC$gpraAdultAll.RSKMJ.x, Goal3ObjectiveC$gpraAdultAll.RSKMJ, Goal3ObjectiveC$gpraAdultAll.RSKALC.x, Goal3ObjectiveC$gpraAdultAll.RSKALC)
+head(Goal3ObjectiveCBaseMonth6) 
+## Filter out NA's, then split apart for the summing then bring back together.
+Goal3ObjectiveCBaseMonth6  = na.omit(Goal3ObjectiveCBaseMonth6)
+Goal3ObjectiveCBaseMonth6  = data.frame(Goal3ObjectiveCBaseMonth6)
+head(Goal3ObjectiveCBaseMonth6)
+
+Goal3ObjectiveCBase = data.frame(Goal3ObjectiveCBaseMonth6$Goal3ObjectiveC.gpraAdultAll.RSKCIG.x, Goal3ObjectiveCBaseMonth6$Goal3ObjectiveC.gpraAdultAll.RSKMJ.x, Goal3ObjectiveCBaseMonth6$Goal3ObjectiveC.gpraAdultAll.RSKALC.x)
+head(Goal3ObjectiveCBase)
+Goal3ObjectiveCBase = data.frame(apply(Goal3ObjectiveCBase, 1, sum, na.rm = TRUE))
+colnames(Goal3ObjectiveCBase ) = c("SAHarmBase")
+head(Goal3ObjectiveCBase)
+dim(Goal3ObjectiveCBase)
+
+Goal3ObjectiveCMonth6 = data.frame(Goal3ObjectiveCBaseMonth6$Goal3ObjectiveC.gpraAdultAll.RSKCIG, Goal3ObjectiveCBaseMonth6$Goal3ObjectiveC.gpraAdultAll.RSKMJ, Goal3ObjectiveCBaseMonth6$Goal3ObjectiveC.gpraAdultAll.RSKALC)
+head(Goal3ObjectiveCMonth6)
+Goal3ObjectiveCMonth6 = data.frame(apply(Goal3ObjectiveCMonth6, 1, sum, na.rm = TRUE))
+colnames(Goal3ObjectiveCMonth6 ) = c("SAHarmMonth6")
+head(Goal3ObjectiveCMonth6)
+dim(Goal3ObjectiveCMonth6)
+
+Goal3ObjectiveCBaseMonth6 = data.frame(Goal3ObjectiveCBase, Goal3ObjectiveCMonth6)
+head(Goal3ObjectiveCBaseMonth6)
+wilcox.test(Goal3ObjectiveCMonth6$SAHarmMonth6, Goal3ObjectiveCBase$SAHarmBase, paired = TRUE, alternative = c("greater"))
+colMeans(Goal3ObjectiveCBaseMonth6)
+
+
+
+
+
+
+
