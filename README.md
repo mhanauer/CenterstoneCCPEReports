@@ -1,3 +1,105 @@
+###### Goal 1 ############################################################
+###### Objective E Number of people served by each intervention Overall
+# First grab total number of people served use the participant ID include the youth then for each intervention.  Grab the length for both adult and youth from all the data which will give you all the people who have data entered.  
+
+totalAdults = length(gpraAdultAll$PARTID)
+totalYouth = length(gpraYouthAll$PARTID)
+
+totalCCPE = sum(totalAdults, totalYouth); totalCCPE
+
+# Now SIS
+InternAdult = data.frame(gpraAdultAll$INTERVENTION_A.x, gpraAdultAll$INTERVENTION_B.x, gpraAdultAll$INTERVENTION_C.x)
+SISAdult = data.frame(subset(InternAdult, gpraAdultAll.INTERVENTION_A.x ==2 | gpraAdultAll.INTERVENTION_B.x == 2 | gpraAdultAll.INTERVENTION_C.x == 2))
+SISAdult = dim(SISAdult)
+SISAdult = SISAdult[1]
+
+InternYouth = data.frame(gpraYouthAll$INTERVENTION_A.x, gpraYouthAll$INTERVENTION_B.x, gpraYouthAll$INTERVENTION_C.x)
+SISYouth = data.frame(subset(InternYouth, gpraYouthAll.INTERVENTION_A.x ==2 | gpraYouthAll.INTERVENTION_B.x == 2 | gpraYouthAll.INTERVENTION_C.x == 2))
+SISYouth = dim(SISYouth)
+SISYouth = SISYouth[1]
+
+totalSIS = sum(SISAdult, SISYouth); totalSIS
+
+# Now CIR
+InternAdult = data.frame(gpraAdultAll$INTERVENTION_A.x, gpraAdultAll$INTERVENTION_B.x, gpraAdultAll$INTERVENTION_C.x)
+CTRAdult = data.frame(subset(InternAdult, gpraAdultAll.INTERVENTION_A.x ==1 | gpraAdultAll.INTERVENTION_B.x == 1 | gpraAdultAll.INTERVENTION_C.x == 1))
+CTRAdult = dim(CTRAdult)
+CTRAdult = CTRAdult[1]
+totalCTR = CTRAdult 
+
+
+# Lead and Seed
+InternAdult = data.frame(gpraAdultAll$INTERVENTION_A.x, gpraAdultAll$INTERVENTION_B.x, gpraAdultAll$INTERVENTION_C.x)
+LSAdult = data.frame(subset(InternAdult, gpraAdultAll.INTERVENTION_A.x ==3 | gpraAdultAll.INTERVENTION_B.x == 3 | gpraAdultAll.INTERVENTION_C.x == 3))
+LSAdult = dim(LSAdult)
+LSAdult = LSAdult[1]
+
+InternYouth = data.frame(gpraYouthAll$INTERVENTION_A.x, gpraYouthAll$INTERVENTION_B.x, gpraYouthAll$INTERVENTION_C.x)
+LSYouth = data.frame(subset(InternYouth, gpraYouthAll.INTERVENTION_A.x ==1 | gpraYouthAll.INTERVENTION_B.x == 1 | gpraYouthAll.INTERVENTION_C.x == 1))
+LSYouth = dim(LSYouth)
+LSYouth = LSYouth[1]
+totalLS = LSYouth
+
+# #### Objective E for the quarter ####################################################################
+gpraAdultAll$MONTH.x = as.numeric(gpraAdultAll$MONTH.x)
+gpraAdultQuarter = subset(gpraAdultAll, MONTH.x > 10 | gpraAdultAll$YEAR.x >= 2017)
+gpraYouthAll$MONTH.x = as.numeric(gpraYouthAll$MONTH.x)
+gpraYouthQuarter = subset(gpraYouthAll, MONTH.x > 10 | gpraYouthAll$YEAR.x >= 2017)
+
+quaterAdults = length(gpraAdultQuarter$PARTID)
+quaterYouth = length(gpraYouthQuarter$PARTID)
+
+quaterCCPE = sum(quaterAdults, quaterYouth); quaterCCPE
+
+# Now SIS
+InternAdult = data.frame(gpraAdultQuarter$INTERVENTION_A.x, gpraAdultQuarter$INTERVENTION_B.x, gpraAdultQuarter$INTERVENTION_C.x)
+SISAdult = data.frame(subset(InternAdult, gpraAdultQuarter.INTERVENTION_A.x ==2 | gpraAdultQuarter.INTERVENTION_B.x == 2 | gpraAdultQuarter.INTERVENTION_C.x == 2))
+SISAdult = dim(SISAdult)
+SISAdult = SISAdult[1]
+
+InternYouth = data.frame(gpraYouthQuarter$INTERVENTION_A.x, gpraYouthQuarter$INTERVENTION_B.x, gpraYouthQuarter$INTERVENTION_C.x)
+SISYouth = data.frame(subset(InternYouth, gpraYouthQuarter.INTERVENTION_A.x ==2 | gpraYouthQuarter.INTERVENTION_B.x == 2 | gpraYouthQuarter.INTERVENTION_C.x == 2))
+SISYouth = dim(SISYouth)
+SISYouth = SISYouth[1]
+
+quaterSIS = sum(SISAdult, SISYouth); quaterSIS
+
+# Now CIR
+InternAdult = data.frame(gpraAdultQuarter$INTERVENTION_A.x, gpraAdultQuarter$INTERVENTION_B.x, gpraAdultQuarter$INTERVENTION_C.x)
+CTRAdult = data.frame(subset(InternAdult, gpraAdultQuarter.INTERVENTION_A.x ==1 | gpraAdultQuarter.INTERVENTION_B.x == 1 | gpraAdultQuarter.INTERVENTION_C.x == 1))
+CTRAdult = dim(CTRAdult)
+CTRAdult = CTRAdult[1]
+quaterCTR =  CTRAdult
+
+
+# Lead and Seed
+InternAdult = data.frame(gpraAdultQuarter$INTERVENTION_A.x, gpraAdultQuarter$INTERVENTION_B.x, gpraAdultQuarter$INTERVENTION_C.x)
+LSAdult = data.frame(subset(InternAdult, gpraAdultQuarter.INTERVENTION_A.x ==3 | gpraAdultQuarter.INTERVENTION_B.x == 3 | gpraAdultQuarter.INTERVENTION_C.x == 3))
+LSAdult = dim(LSAdult)
+LSAdult = LSAdult[1]
+
+InternYouth = data.frame(gpraYouthQuarter$INTERVENTION_A.x, gpraYouthQuarter$INTERVENTION_B.x, gpraYouthQuarter$INTERVENTION_C.x)
+LSYouth = data.frame(subset(InternYouth, gpraYouthQuarter.INTERVENTION_A.x ==1 | gpraYouthQuarter.INTERVENTION_B.x == 1 | gpraYouthQuarter.INTERVENTION_C.x == 1))
+LSYouth = dim(LSYouth)
+LSYouth = LSYouth[1]
+
+quaterLS = sum(LSAdult, LSYouth)
+
+## Create a nice table for the data
+totalQuarterObjectiveE = t(data.frame(totalAdults, totalYouth, totalCCPE, totalSIS, totalCTR, totalLS))
+colnames(totalQuarterObjectiveE) = c("Total")
+write.csv(totalQuarterObjectiveE, "totalQuarterObjectiveE.csv", row.names = FALSE)
+
+
+###### Goal 1 ############################################################
+###### Objective F Need yearly and quaterly
+Goal1ObjectiveFAdult = data.frame(gpraAdultAll$YEAR.x, gpraAdultAll$MONTH.x)
+Goal1ObjectiveFAdultYear = subset(Goal1ObjectiveFAdult, gpraAdultAll.YEAR.x = 2017)
+Goal1ObjectiveFAdultYear = dim(Goal1ObjectiveFAdultYear)
+Goal1ObjectiveFAdultYear = Goal1ObjectiveFAdultYear[1]
+
+Goal1ObjectiveFAdultQuarter = subset(Goal1ObjectiveFAdult, MONTH.x > 10, YEAR.X >= 2017)
+
 #### CCPE Reports ######  ###### ###### ###### ###### ###### ###### ###### ######
 # Demographics Overall: Gender Adult and Youth 
 
@@ -220,11 +322,11 @@ colnames(overallEthYouth) = c("Ethnicity")
 write.csv(overallEthYouth, "overallEthYouth.csv", row.names = TRUE)
 
 # Demographics Quarter: Gender Adult and Youth  ######  ###### ###### ###### ###### ###### ###### ###### ######
-# So I t.  Last quarter was 10-31-17.  Need to replace All with Quarter and overall with quarter
+# So It.  Last quarter was 10-31-17.  Need to replace All with Quarter and overall with quarter.  Because this is multiyear I need to have the month as well as the year.  So for this coming quarter 2018.  Because this quater moves into two year I need both 2017 and 2018.  Grab the baseline data because this will include the new people for baseline and their future data will be included  
 gpraAdultAll$MONTH.x = as.numeric(gpraAdultAll$MONTH.x)
-gpraAdultQuarter = subset(gpraAdultAll, MONTH.x > 10)
+gpraAdultQuarter = subset(gpraAdultAll, MONTH.x > 10 | gpraAdultAll$YEAR.x >= 2017)
 gpraYouthAll$MONTH.x = as.numeric(gpraYouthAll$MONTH.x)
-gpraYouthQuarter = subset(gpraYouthAll, MONTH.x > 10)
+gpraYouthQuarter = subset(gpraYouthAll, MONTH.x > 10 | gpraYouthAll$YEAR.x >= 2017)
 setwd("C:/Users/Matthew.Hanauer/Desktop")
 
 QuarterAdultGender = data.frame(count(gpraAdultQuarter$GENDER.x))
