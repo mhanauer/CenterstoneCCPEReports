@@ -1,6 +1,10 @@
 ###### Goal 1 ############################################################
 ###### Objective E Number of people served by each intervention Overall
 # First grab total number of people served use the participant ID include the youth then for each intervention.  Grab the length for both adult and youth from all the data which will give you all the people who have data entered.  
+# You don't need to specifcy the baseline data only, because there is no way that someone could not have baseline.  Therefore, the length of the total data set will equal the length of the baseline
+###### Goal 1 ############################################################
+###### Objective E Number of people served by each intervention Overall
+# First grab total number of people served use the participant ID include the youth then for each intervention.  Grab the length for both adult and youth from all the data which will give you all the people who have data entered.  
 
 totalAdults = length(gpraAdultAll$PARTID)
 totalYouth = length(gpraYouthAll$PARTID)
@@ -14,13 +18,13 @@ SISAdult = dim(SISAdult)
 SISAdult = SISAdult[1]
 
 InternYouth = data.frame(gpraYouthAll$INTERVENTION_A.x, gpraYouthAll$INTERVENTION_B.x, gpraYouthAll$INTERVENTION_C.x)
-SISYouth = data.frame(subset(InternYouth, gpraYouthAll.INTERVENTION_A.x ==2 | gpraYouthAll.INTERVENTION_B.x == 2 | gpraYouthAll.INTERVENTION_C.x == 2))
+SISYouth = data.frame(subset(InternYouth, gpraYouthAll.INTERVENTION_A.x == 2 | gpraYouthAll.INTERVENTION_B.x == 2 | gpraYouthAll.INTERVENTION_C.x == 2))
 SISYouth = dim(SISYouth)
 SISYouth = SISYouth[1]
 
 totalSIS = sum(SISAdult, SISYouth); totalSIS
 
-# Now CIR
+# Now CTR and no CTR for youth
 InternAdult = data.frame(gpraAdultAll$INTERVENTION_A.x, gpraAdultAll$INTERVENTION_B.x, gpraAdultAll$INTERVENTION_C.x)
 CTRAdult = data.frame(subset(InternAdult, gpraAdultAll.INTERVENTION_A.x ==1 | gpraAdultAll.INTERVENTION_B.x == 1 | gpraAdultAll.INTERVENTION_C.x == 1))
 CTRAdult = dim(CTRAdult)
@@ -28,7 +32,7 @@ CTRAdult = CTRAdult[1]
 totalCTR = CTRAdult 
 
 
-# Lead and Seed
+# Lead and Seed 
 InternAdult = data.frame(gpraAdultAll$INTERVENTION_A.x, gpraAdultAll$INTERVENTION_B.x, gpraAdultAll$INTERVENTION_C.x)
 LSAdult = data.frame(subset(InternAdult, gpraAdultAll.INTERVENTION_A.x ==3 | gpraAdultAll.INTERVENTION_B.x == 3 | gpraAdultAll.INTERVENTION_C.x == 3))
 LSAdult = dim(LSAdult)
@@ -40,55 +44,25 @@ LSYouth = dim(LSYouth)
 LSYouth = LSYouth[1]
 totalLS = LSYouth
 
-# #### Objective E for the quarter ####################################################################
-gpraAdultAll$MONTH.x = as.numeric(gpraAdultAll$MONTH.x)
-gpraAdultQuarter = subset(gpraAdultAll, MONTH.x > 10 | gpraAdultAll$YEAR.x >= 2017)
-gpraYouthAll$MONTH.x = as.numeric(gpraYouthAll$MONTH.x)
-gpraYouthQuarter = subset(gpraYouthAll, MONTH.x > 10 | gpraYouthAll$YEAR.x >= 2017)
+# Respect need it for adult and youth
+InternAdult = data.frame(gpraAdultAll$INTERVENTION_A.x, gpraAdultAll$INTERVENTION_B.x, gpraAdultAll$INTERVENTION_C.x)
+RespectAdult = data.frame(subset(InternAdult, gpraAdultAll.INTERVENTION_A.x ==51 | gpraAdultAll.INTERVENTION_B.x == 51 | gpraAdultAll.INTERVENTION_C.x == 51))
+RespectAdult = dim(RespectAdult)
+RespectAdult = RespectAdult[1]
 
-quaterAdults = length(gpraAdultQuarter$PARTID)
-quaterYouth = length(gpraYouthQuarter$PARTID)
+InternYouth = data.frame(gpraYouthAll$INTERVENTION_A.x, gpraYouthAll$INTERVENTION_B.x, gpraYouthAll$INTERVENTION_C.x)
+RespectYouth = data.frame(subset(InternYouth, gpraYouthAll.INTERVENTION_A.x ==51 | gpraYouthAll.INTERVENTION_B.x == 51 | gpraYouthAll.INTERVENTION_C.x == 51))
+RespectYouth = dim(RespectYouth)
+RespectYouth = RespectYouth[1]
 
-quaterCCPE = sum(quaterAdults, quaterYouth); quaterCCPE
+totalRespect = data.frame(sum(RespectAdult, RespectYouth))
+colnames(totalRespect) = c("totalRespect")
 
-# Now SIS
-InternAdult = data.frame(gpraAdultQuarter$INTERVENTION_A.x, gpraAdultQuarter$INTERVENTION_B.x, gpraAdultQuarter$INTERVENTION_C.x)
-SISAdult = data.frame(subset(InternAdult, gpraAdultQuarter.INTERVENTION_A.x ==2 | gpraAdultQuarter.INTERVENTION_B.x == 2 | gpraAdultQuarter.INTERVENTION_C.x == 2))
-SISAdult = dim(SISAdult)
-SISAdult = SISAdult[1]
-
-InternYouth = data.frame(gpraYouthQuarter$INTERVENTION_A.x, gpraYouthQuarter$INTERVENTION_B.x, gpraYouthQuarter$INTERVENTION_C.x)
-SISYouth = data.frame(subset(InternYouth, gpraYouthQuarter.INTERVENTION_A.x ==2 | gpraYouthQuarter.INTERVENTION_B.x == 2 | gpraYouthQuarter.INTERVENTION_C.x == 2))
-SISYouth = dim(SISYouth)
-SISYouth = SISYouth[1]
-
-quaterSIS = sum(SISAdult, SISYouth); quaterSIS
-
-# Now CIR
-InternAdult = data.frame(gpraAdultQuarter$INTERVENTION_A.x, gpraAdultQuarter$INTERVENTION_B.x, gpraAdultQuarter$INTERVENTION_C.x)
-CTRAdult = data.frame(subset(InternAdult, gpraAdultQuarter.INTERVENTION_A.x ==1 | gpraAdultQuarter.INTERVENTION_B.x == 1 | gpraAdultQuarter.INTERVENTION_C.x == 1))
-CTRAdult = dim(CTRAdult)
-CTRAdult = CTRAdult[1]
-quaterCTR =  CTRAdult
-
-
-# Lead and Seed
-InternAdult = data.frame(gpraAdultQuarter$INTERVENTION_A.x, gpraAdultQuarter$INTERVENTION_B.x, gpraAdultQuarter$INTERVENTION_C.x)
-LSAdult = data.frame(subset(InternAdult, gpraAdultQuarter.INTERVENTION_A.x ==3 | gpraAdultQuarter.INTERVENTION_B.x == 3 | gpraAdultQuarter.INTERVENTION_C.x == 3))
-LSAdult = dim(LSAdult)
-LSAdult = LSAdult[1]
-
-InternYouth = data.frame(gpraYouthQuarter$INTERVENTION_A.x, gpraYouthQuarter$INTERVENTION_B.x, gpraYouthQuarter$INTERVENTION_C.x)
-LSYouth = data.frame(subset(InternYouth, gpraYouthQuarter.INTERVENTION_A.x ==1 | gpraYouthQuarter.INTERVENTION_B.x == 1 | gpraYouthQuarter.INTERVENTION_C.x == 1))
-LSYouth = dim(LSYouth)
-LSYouth = LSYouth[1]
-
-quaterLS = sum(LSAdult, LSYouth)
 
 ## Create a nice table for the data
-totalQuarterObjectiveE = t(data.frame(totalAdults, totalYouth, totalCCPE, totalSIS, totalCTR, totalLS))
-colnames(totalQuarterObjectiveE) = c("Total")
-write.csv(totalQuarterObjectiveE, "totalQuarterObjectiveE.csv", row.names = FALSE)
+Goal1ObjectiveE= data.frame(totalCCPE, totalAdults , totalYouth, SISAdult, SISYouth, totalSIS, totalCTR, LSAdult, LSYouth, totalLS, RespectAdult, RespectYouth, totalRespect)
+setwd("C:/Users/Matthew.Hanauer/Desktop")
+write.csv(Goal1ObjectiveE, "Goal1ObjectiveE.csv", row.names = FALSE)
 
 
 ###### Goal 1 ############################################################
@@ -499,102 +473,6 @@ Goal3ObjectiveIBaseMonth6 =  data.frame(t(colMeans(Goal3ObjectiveIBaseMonth6)))
 colnames(Goal3ObjectiveIBaseMonth6) = c("Base", "Month6")
 Goal3ObjectiveIBaseMonth6$Difference = round((Goal3ObjectiveIBaseMonth6$Month6-Goal3ObjectiveIBaseMonth6$Base)/Goal3ObjectiveIBaseMonth6$Base,2)
 write.csv(Goal3ObjectiveIBaseMonth6, "Goal3ObjectiveHBaseMonth6.csv", row.names = FALSE)
-
-####### Objective J ########################################### ########################################### ###########################################
-
-
-
-###### Goal 1 ############################################################
-###### Objective E Number of people served by each intervention Overall
-# First grab total number of people served use the participant ID include the youth then for each intervention.  Grab the length for both adult and youth from all the data which will give you all the people who have data entered.  
-
-totalAdults = length(gpraAdultAll$PARTID)
-totalYouth = length(gpraYouthAll$PARTID)
-
-totalCCPE = sum(totalAdults, totalYouth); totalCCPE
-
-# Now SIS
-InternAdult = data.frame(gpraAdultAll$INTERVENTION_A.x, gpraAdultAll$INTERVENTION_B.x, gpraAdultAll$INTERVENTION_C.x)
-SISAdult = data.frame(subset(InternAdult, gpraAdultAll.INTERVENTION_A.x ==2 | gpraAdultAll.INTERVENTION_B.x == 2 | gpraAdultAll.INTERVENTION_C.x == 2))
-SISAdult = dim(SISAdult)
-SISAdult = SISAdult[1]
-
-InternYouth = data.frame(gpraYouthAll$INTERVENTION_A.x, gpraYouthAll$INTERVENTION_B.x, gpraYouthAll$INTERVENTION_C.x)
-SISYouth = data.frame(subset(InternYouth, gpraYouthAll.INTERVENTION_A.x ==2 | gpraYouthAll.INTERVENTION_B.x == 2 | gpraYouthAll.INTERVENTION_C.x == 2))
-SISYouth = dim(SISYouth)
-SISYouth = SISYouth[1]
-
-totalSIS = sum(SISAdult, SISYouth); totalSIS
-
-# Now CIR
-InternAdult = data.frame(gpraAdultAll$INTERVENTION_A.x, gpraAdultAll$INTERVENTION_B.x, gpraAdultAll$INTERVENTION_C.x)
-CTRAdult = data.frame(subset(InternAdult, gpraAdultAll.INTERVENTION_A.x ==1 | gpraAdultAll.INTERVENTION_B.x == 1 | gpraAdultAll.INTERVENTION_C.x == 1))
-CTRAdult = dim(CTRAdult)
-CTRAdult = CTRAdult[1]
-totalCTR = CTRAdult 
-
-
-# Lead and Seed
-InternAdult = data.frame(gpraAdultAll$INTERVENTION_A.x, gpraAdultAll$INTERVENTION_B.x, gpraAdultAll$INTERVENTION_C.x)
-LSAdult = data.frame(subset(InternAdult, gpraAdultAll.INTERVENTION_A.x ==3 | gpraAdultAll.INTERVENTION_B.x == 3 | gpraAdultAll.INTERVENTION_C.x == 3))
-LSAdult = dim(LSAdult)
-LSAdult = LSAdult[1]
-
-InternYouth = data.frame(gpraYouthAll$INTERVENTION_A.x, gpraYouthAll$INTERVENTION_B.x, gpraYouthAll$INTERVENTION_C.x)
-LSYouth = data.frame(subset(InternYouth, gpraYouthAll.INTERVENTION_A.x ==1 | gpraYouthAll.INTERVENTION_B.x == 1 | gpraYouthAll.INTERVENTION_C.x == 1))
-LSYouth = dim(LSYouth)
-LSYouth = LSYouth[1]
-totalLS = LSYouth
-
-# #### Objective E for the quarter ####################################################################
-gpraAdultAll$MONTH.x = as.numeric(gpraAdultAll$MONTH.x)
-gpraAdultQuarter = subset(gpraAdultAll, MONTH.x > 10 | gpraAdultAll$YEAR.x >= 2017)
-gpraYouthAll$MONTH.x = as.numeric(gpraYouthAll$MONTH.x)
-gpraYouthQuarter = subset(gpraYouthAll, MONTH.x > 10 | gpraYouthAll$YEAR.x >= 2017)
-
-quaterAdults = length(gpraAdultQuarter$PARTID)
-quaterYouth = length(gpraYouthQuarter$PARTID)
-
-quaterCCPE = sum(quaterAdults, quaterYouth); quaterCCPE
-
-# Now SIS
-InternAdult = data.frame(gpraAdultQuarter$INTERVENTION_A.x, gpraAdultQuarter$INTERVENTION_B.x, gpraAdultQuarter$INTERVENTION_C.x)
-SISAdult = data.frame(subset(InternAdult, gpraAdultQuarter.INTERVENTION_A.x ==2 | gpraAdultQuarter.INTERVENTION_B.x == 2 | gpraAdultQuarter.INTERVENTION_C.x == 2))
-SISAdult = dim(SISAdult)
-SISAdult = SISAdult[1]
-
-InternYouth = data.frame(gpraYouthQuarter$INTERVENTION_A.x, gpraYouthQuarter$INTERVENTION_B.x, gpraYouthQuarter$INTERVENTION_C.x)
-SISYouth = data.frame(subset(InternYouth, gpraYouthQuarter.INTERVENTION_A.x ==2 | gpraYouthQuarter.INTERVENTION_B.x == 2 | gpraYouthQuarter.INTERVENTION_C.x == 2))
-SISYouth = dim(SISYouth)
-SISYouth = SISYouth[1]
-
-quaterSIS = sum(SISAdult, SISYouth); quaterSIS
-
-# Now CIR
-InternAdult = data.frame(gpraAdultQuarter$INTERVENTION_A.x, gpraAdultQuarter$INTERVENTION_B.x, gpraAdultQuarter$INTERVENTION_C.x)
-CTRAdult = data.frame(subset(InternAdult, gpraAdultQuarter.INTERVENTION_A.x ==1 | gpraAdultQuarter.INTERVENTION_B.x == 1 | gpraAdultQuarter.INTERVENTION_C.x == 1))
-CTRAdult = dim(CTRAdult)
-CTRAdult = CTRAdult[1]
-quaterCTR =  CTRAdult
-
-
-# Lead and Seed
-InternAdult = data.frame(gpraAdultQuarter$INTERVENTION_A.x, gpraAdultQuarter$INTERVENTION_B.x, gpraAdultQuarter$INTERVENTION_C.x)
-LSAdult = data.frame(subset(InternAdult, gpraAdultQuarter.INTERVENTION_A.x ==3 | gpraAdultQuarter.INTERVENTION_B.x == 3 | gpraAdultQuarter.INTERVENTION_C.x == 3))
-LSAdult = dim(LSAdult)
-LSAdult = LSAdult[1]
-
-InternYouth = data.frame(gpraYouthQuarter$INTERVENTION_A.x, gpraYouthQuarter$INTERVENTION_B.x, gpraYouthQuarter$INTERVENTION_C.x)
-LSYouth = data.frame(subset(InternYouth, gpraYouthQuarter.INTERVENTION_A.x ==1 | gpraYouthQuarter.INTERVENTION_B.x == 1 | gpraYouthQuarter.INTERVENTION_C.x == 1))
-LSYouth = dim(LSYouth)
-LSYouth = LSYouth[1]
-
-quaterLS = sum(LSAdult, LSYouth)
-
-## Create a nice table for the data
-totalQuarterObjectiveE = t(data.frame(totalAdults, totalYouth, totalCCPE, totalSIS, totalCTR, totalLS))
-colnames(totalQuarterObjectiveE) = c("Total")
-write.csv(totalQuarterObjectiveE, "totalQuarterObjectiveE.csv", row.names = FALSE)
 
 
 ###### Goal 1 ############################################################
