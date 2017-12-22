@@ -410,21 +410,7 @@ Goal3ObjectiveKBaseMonth3$Difference = round((Goal3ObjectiveKBaseMonth3$Month3-G
 Goal3ObjectiveKBaseMonth3 = round(Goal3ObjectiveKBaseMonth3,2)
 write.csv(Goal3ObjectiveKBaseMonth3, "Goal3ObjectiveKBaseMonth3.csv", row.names = FALSE)
 
-
-####### Goal 3 Objective L ########################################### ########################################### ###########################################
-# Using the pocket screener.  
-Goal3ObjectiveLBaseMonth3 = data.frame(pocketScreenerAll$STDHx.x, pocketScreenerAll$STDHx.y)
-Goal3ObjectiveLBaseMonth3 = data.frame(na.omit(Goal3ObjectiveLBaseMonth3))
-Goal3ObjectiveLBaseMonth3 = data.frame(apply(Goal3ObjectiveLBaseMonth3, 2, function(x){ifelse(x == "Yes", 1, 0)}))
-dim(Goal3ObjectiveLBaseMonth3)
-Goal3ObjectiveLBaseMonth3 = data.frame(t(colMeans(Goal3ObjectiveLBaseMonth3)))
-colnames(Goal3ObjectiveLBaseMonth3) = c("Base", "Month3")
-Goal3ObjectiveLBaseMonth3$Difference = (Goal3ObjectiveLBaseMonth3$Month3-Goal3ObjectiveLBaseMonth3$Base)/Goal3ObjectiveLBaseMonth3$Base
-Goal3ObjectiveLBaseMonth3 = round(Goal3ObjectiveLBaseMonth3,2)
-write.csv(Goal3ObjectiveLBaseMonth3, "Goal3ObjectiveLBaseMonth3.csv", row.names = FALSE)
-
-
-##### Objective M ########################## ###############################################################################################################################
+##### Objective L ########################## ###############################################################################################################################
 ## STDHx and subset by year if any data and then compare by year.  No year so need to merge the GPRA with pocket then grab year from GPRA with the one variable here
 # LASTSEX_UNP Getting the number of people with unprotected and want to reduce that so 1 =0 and 2 = 1
 Goal3ObjectiveMBaseMonth3 = data.frame(gpraAdultAll$LASTSEX_UNP.x, gpraAdultAll$LASTSEX_UNP.y)
@@ -439,6 +425,23 @@ Goal3ObjectiveMBaseMonth3 = data.frame(t(colMeans(Goal3ObjectiveMBaseMonth3)))
 Goal3ObjectiveMBaseMonth3$Difference = (Goal3ObjectiveMBaseMonth3$Month3-Goal3ObjectiveMBaseMonth3$Base) / Goal3ObjectiveMBaseMonth3$Base
 Goal3ObjectiveMBaseMonth3 = round(Goal3ObjectiveMBaseMonth3, 2)
 write.csv(Goal3ObjectiveMBaseMonth3, "Goal3ObjectiveMBaseMonth3.csv", row.names = FALSE)
+
+
+####### Goal 3 Objective M ########################################### ########################################### ###########################################
+# Using the pocket screener.  
+Goal3ObjectiveLBaseMonth3 = data.frame(pocketScreenerAll$STDHx.x, pocketScreenerAll$STDHx.y)
+Goal3ObjectiveLBaseMonth3 = data.frame(na.omit(Goal3ObjectiveLBaseMonth3))
+Goal3ObjectiveLBaseMonth3 = data.frame(apply(Goal3ObjectiveLBaseMonth3, 2, function(x){ifelse(x == "Yes", 1, 0)}))
+dim(Goal3ObjectiveLBaseMonth3)
+Goal3ObjectiveLBaseMonth3 = data.frame(t(colMeans(Goal3ObjectiveLBaseMonth3)))
+colnames(Goal3ObjectiveLBaseMonth3) = c("Base", "Month3")
+wilcox.test(Goal3ObjectiveLBaseMonth3$Month3, Goal3ObjectiveLBaseMonth3$Base, paired = TRUE, alternative = c("less"))
+Goal3ObjectiveLBaseMonth3$Difference = (Goal3ObjectiveLBaseMonth3$Month3-Goal3ObjectiveLBaseMonth3$Base)/Goal3ObjectiveLBaseMonth3$Base
+Goal3ObjectiveLBaseMonth3 = round(Goal3ObjectiveLBaseMonth3,2)
+write.csv(Goal3ObjectiveLBaseMonth3, "Goal3ObjectiveLBaseMonth3.csv", row.names = FALSE)
+
+
+
 
 ##### CCPE Grant Summary Report Data ######## ########################################################################################
 ##### Project Objectives ################### ###############################################################################################
