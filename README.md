@@ -512,4 +512,43 @@ mean(age$gpraAdultAll.YOB.x)
 #Goal3ObjectiveK = Adult Empowerment
 #Goal3ObjectiveM = Reduce unprotected sex
 
+#### SPARS Metrics   ##### ############################################################
+
+## Creating new variable to subset later ########################
+gpraAdultBase$Date = as.Date(paste(gpraAdultBase$YEAR, gpraAdultBase$MONTH, gpraAdultBase$DAY, sep = "/"))
+gpraAdultBase$Date
+as.Date(gpraAdultBase$Date) 
+gpraYouthBase$Date = as.Date(paste(gpraYouthBase$YEAR, gpraYouthBase$MONTH, gpraYouthBase$DAY, sep = "/"))
+as.Date(gpraYouthBase$Date) 
+
+# Total People
+
+QPR1Youth = data.frame(na.omit(gpraYouthBase$Date))
+colnames(QPR1Youth) = c("Date")
+QPR1Youth$Date
+QPR1Adult = data.frame(na.omit(gpraAdultBase$Date))
+colnames(QPR1Adult) = c("Date")
+
+QPR1 = rbind(QPR1Adult, QPR1Youth)
+QPR1$Date
+write.csv(QPR1, "QPR1.csv")
+QPR1=QPR1[QPR1$Date >= "2017-10-01" & QPR1$Date <= "2017-12-31",]
+length(QPR1)
+
+#Adolescents (Age 12-17)
+QPR2 = data.frame(gpraYouthBase$Date)
+QPR2 = data.frame(na.omit(QPR2))
+colnames(QPR2) = c("Date")
+QPR2=QPR2[QPR2$Date >= "2017-10-01" & QPR2$Date <= "2017-12-31",]
+length(QPR2)
+
+##### Young Adults (Age 18-24) in college ##### ##### ##### ##### ##### ##### ##### 
+# 1 and 2 are yesses and 0 is no.  
+# Can get rid of na's, because I need both variables to identitfy them
+QPR3 = data.frame(gpraAdultBase$Date, gpraAdultBase$COLLEGE)
+QPR3 = data.frame(na.omit(QPR3))
+colnames(QPR3) = c("Date", "College")
+count(QPR3$College)
+# subset date first then do the subset for college
+QPR3=QPR3[QPR3$Date >= "2017-10-01" & QPR3$Date <= "2017-12-31",]
 
