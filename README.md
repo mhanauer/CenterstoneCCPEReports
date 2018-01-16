@@ -746,7 +746,7 @@ count(QPR19$E_NONHISPAN)
 ## Received an HIV test for the first time using CSAP/MAI grant funds during current reporting period
 QPR19 = data.frame(gpraAdultBase$Date, gpraAdultBase$INTERVENTION_B, gpraAdultBase$HIV_RESULTS_N, gpraAdultBase$E_NONHISPAN)
 QPR19 = data.frame(na.omit(QPR19))
-colnames(QPR19) = c("Date", "INTERVENTION_B", "E_NONHISPAN")
+colnames(QPR19) = c("Date", "INTERVENTION_B","HIV_RESULTS_N", "E_NONHISPAN")
 QPR19=QPR19[QPR19$Date >= "2017-10-01" & QPR19$Date <= "2017-12-31",]
 QPR19 = subset(QPR19, INTERVENTION_B == 78)
 QPR19 = subset(QPR19, HIV_RESULTS_N == 0)
@@ -802,7 +802,8 @@ QPR19 = subset(QPR19, INTERVENTION_B == 78)
 count(QPR19$R_WHITE_N)
 
 # Multi just grab columns after deleting missing then sum.  Then if greater than 1 then are 1 if not 0.
-QPR19 = data.frame(Date = gpraAdultBase$Date, INTERVENTION_B =gpraAdultBase$INTERVENTION_B, gpraAdultBase[,17:34])
+QPR19 = data.frame(Date = gpraAdultBase$Date, INTERVENTION_B =gpraAdultBase$INTERVENTION_B, gpraAdultBase[,c(17:20, 22:34)])
+head(QPR19)
 #QPR19 = data.frame(na.omit(QPR19))
 QPR19=QPR19[QPR19$Date >= "2017-10-01" & QPR19$Date <= "2017-12-31",]
 QPR19
@@ -839,7 +840,6 @@ colnames(QPR19) = c("Date", "INTERVENTION_B", "R_ASIAIN_N", "R_CHINESE_N", "R_FI
 QPR19=QPR19[QPR19$Date >= "2017-10-01" & QPR19$Date <= "2017-12-31",]
 QPR19 = subset(QPR19, INTERVENTION_B == 78)
 QPR19 = subset(QPR19, HIV_RESULTS_N == 0)
-# Can do x == 1, because 1's will only be in the Asian category
 QPR19 = data.frame(apply(QPR19, 2, function(x){ifelse(x == 1, 1, 0)}))
 QPR19 = data.frame(apply(QPR19, 1, sum))
 colnames(QPR19) = c("Asian")
@@ -851,9 +851,9 @@ QPR19 = data.frame(na.omit(QPR19))
 QPR19=QPR19[QPR19$Date >= "2017-10-01" & QPR19$Date <= "2017-12-31",]
 QPR19 = subset(QPR19, INTERVENTION_B == 78)
 QPR19 = subset(QPR19, HIV_RESULTS_N == 0)
-# Can do x == 1, because 1's will only be in the Asian category
 QPR19 = data.frame(apply(QPR19, 2, function(x){ifelse(x == 1, 1, 0)}))
 QPR19 = data.frame(apply(QPR19, 1, sum))
+
 colnames(QPR19) = c("Asian")
 count(QPR19$Asian)
 
@@ -868,7 +868,7 @@ QPR19 = subset(QPR19, HIV_RESULTS_N == 0)
 count(QPR19$R_WHITE_N)
 
 # Multi just grab columns after deleting missing then sum.  Then if greater than 1 then are 1 if not 0.
-QPR19 = data.frame(Date = gpraAdultBase$Date, INTERVENTION_B =gpraAdultBase$INTERVENTION_B, gpraAdultBase[,17:34],HIV_RESULTS_N=  gpraAdultBase$HIV_RESULTS_N)
+QPR19 = data.frame(Date = gpraAdultBase$Date, INTERVENTION_B =gpraAdultBase$INTERVENTION_B, gpraAdultBase[,c(17:20, 22:34)])
 #QPR19 = data.frame(na.omit(QPR19))
 QPR19=QPR19[QPR19$Date >= "2017-10-01" & QPR19$Date <= "2017-12-31",]
 QPR19
@@ -958,6 +958,7 @@ QPR19 = data.frame(na.omit(QPR19))
 colnames(QPR19) = c("Date", "INTERVENTION_B", "AGE")
 QPR19=QPR19[QPR19$Date >= "2017-10-01" & QPR19$Date <= "2017-12-31",]
 QPR19 = subset(QPR19, INTERVENTION_B == 78)
+QPR19 = subset(QPR19, HIV_RESULTS_N == 0)
 count(QPR19$AGE)
 
 # Rest are zero
