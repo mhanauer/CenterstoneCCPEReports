@@ -1,1004 +1,422 @@
-###### Goal 1 ############################################################
-###### Objective E Number of people served by each intervention Overall
-# First grab total number of people served use the participant ID include the youth then for each intervention.  Grab the length for both adult and youth from all the data which will give you all the people who have data entered.  
-# You don't need to specifcy the baseline data only, because there is no way that someone could not have baseline.  Therefore, the length of the total data set will equal the length of the baseline
-###### Goal 1 ############################################################
-###### Objective E and F Number of people served by each intervention Overall
-# First grab total number of people served use the participant ID include the youth then for each intervention.  Grab the length for both adult and youth from all the data which will give you all the people who have data entered.  
-
-totalAdults = (gpraAdultAll$PARTID)
-totalAdults = data.frame(na.omit(totalAdults))
-totalYouth = (gpraYouthAll$PARTID)
-totalYouth = data.frame(na.omit(totalYouth))
-
-totalAdults = dim(totalAdults)[1]
-totalYouth = dim(totalYouth)[1]
-
-totalCCPE = sum(totalAdults, totalYouth); totalCCPE
-
-
-
-# Now SIS
-InternAdult = data.frame(gpraAdultAll$INTERVENTION_A.x, gpraAdultAll$INTERVENTION_B.x, gpraAdultAll$INTERVENTION_C.x)
-SISAdult = data.frame(subset(InternAdult, gpraAdultAll.INTERVENTION_A.x ==2 | gpraAdultAll.INTERVENTION_B.x == 2 | gpraAdultAll.INTERVENTION_C.x == 2))
-SISAdult = dim(SISAdult)
-SISAdult = SISAdult[1]
-
-InternYouth = data.frame(gpraYouthAll$INTERVENTION_A.x, gpraYouthAll$INTERVENTION_B.x, gpraYouthAll$INTERVENTION_C.x)
-SISYouth = data.frame(subset(InternYouth, gpraYouthAll.INTERVENTION_A.x == 2 | gpraYouthAll.INTERVENTION_B.x == 2 | gpraYouthAll.INTERVENTION_C.x == 2))
-SISYouth = dim(SISYouth)
-SISYouth = SISYouth[1]
-
-totalSIS = sum(SISAdult, SISYouth); totalSIS
-
-# Now CTR and no CTR for youth
-InternAdult = data.frame(gpraAdultAll$INTERVENTION_A.x, gpraAdultAll$INTERVENTION_B.x, gpraAdultAll$INTERVENTION_C.x)
-CTRAdult = data.frame(subset(InternAdult, gpraAdultAll.INTERVENTION_A.x ==1 | gpraAdultAll.INTERVENTION_B.x == 1 | gpraAdultAll.INTERVENTION_C.x == 1))
-CTRAdult = dim(CTRAdult)
-CTRAdult = CTRAdult[1]
-totalCTR = CTRAdult 
-
-
-# Lead and Seed 
-InternAdult = data.frame(gpraAdultAll$INTERVENTION_A.x, gpraAdultAll$INTERVENTION_B.x, gpraAdultAll$INTERVENTION_C.x)
-LSAdult = data.frame(subset(InternAdult, gpraAdultAll.INTERVENTION_A.x ==3 | gpraAdultAll.INTERVENTION_B.x == 3 | gpraAdultAll.INTERVENTION_C.x == 3))
-LSAdult = dim(LSAdult)
-LSAdult = LSAdult[1]
-
-InternYouth = data.frame(gpraYouthAll$INTERVENTION_A.x, gpraYouthAll$INTERVENTION_B.x, gpraYouthAll$INTERVENTION_C.x)
-LSYouth = data.frame(subset(InternYouth, gpraYouthAll.INTERVENTION_A.x ==1 | gpraYouthAll.INTERVENTION_B.x == 1 | gpraYouthAll.INTERVENTION_C.x == 1))
-LSYouth = dim(LSYouth)
-LSYouth = LSYouth[1]
-totalLS = LSYouth
-
-# Respect need it for adult and youth
-InternAdult = data.frame(gpraAdultAll$INTERVENTION_A.x, gpraAdultAll$INTERVENTION_B.x, gpraAdultAll$INTERVENTION_C.x)
-RespectAdult = data.frame(subset(InternAdult, gpraAdultAll.INTERVENTION_A.x ==51 | gpraAdultAll.INTERVENTION_B.x == 51 | gpraAdultAll.INTERVENTION_C.x == 51))
-RespectAdult = dim(RespectAdult)
-RespectAdult = RespectAdult[1]
-
-InternYouth = data.frame(gpraYouthAll$INTERVENTION_A.x, gpraYouthAll$INTERVENTION_B.x, gpraYouthAll$INTERVENTION_C.x)
-RespectYouth = data.frame(subset(InternYouth, gpraYouthAll.INTERVENTION_A.x ==51 | gpraYouthAll.INTERVENTION_B.x == 51 | gpraYouthAll.INTERVENTION_C.x == 51))
-RespectYouth = dim(RespectYouth)
-RespectYouth = RespectYouth[1]
-
-totalRespect = data.frame(sum(RespectAdult, RespectYouth))
-colnames(totalRespect) = c("totalRespect")
-
-
-## Create a nice table for the data
-Goal1ObjectiveE= data.frame(totalCCPE, totalAdults , totalYouth, SISAdult, SISYouth, totalSIS, totalCTR, LSAdult, LSYouth, totalLS, RespectAdult, RespectYouth, totalRespect)
-setwd("C:/Users/Matthew.Hanauer/Desktop")
-write.csv(Goal1ObjectiveE, "Goal1ObjectiveE.csv", row.names = FALSE)
-
-totalTesting = 489+totalCTR; totalTesting
-
-##### Goal 1 Objective G #############  ############# ############# ############# ############# #############
-### 2016 Testing 
-
-
-################## Goal 3 Objective A #############################################################
-# Grabbing the KNOW_SA variable, because other variables are being used.  Only 17 particpants from pocket which would be better.
-Goal3ObjectiveA =  data.frame(gpraAdultAll$KNOW_SA.x, gpraAdultAll$KNOW_SA.y, gpraAdultAll$KNOW_SA)
-
-Goal3ObjectiveABaseMonth3 = data.frame(Goal3ObjectiveA$gpraAdultAll.KNOW_SA.x, Goal3ObjectiveA$gpraAdultAll.KNOW_SA.y)
-Goal3ObjectiveABaseMonth3 = data.frame(apply(Goal3ObjectiveABaseMonth3, 2, function(x){ifelse(x == 98, NA, x)}))
-Goal3ObjectiveABaseMonth3 = na.omit(Goal3ObjectiveABaseMonth3)
-Goal3ObjectiveABaseMonth3 = data.frame(Goal3ObjectiveABaseMonth3)
-## Here is the number of people that completed both
-dim(Goal3ObjectiveABaseMonth3)
-head(Goal3ObjectiveABaseMonth3)
-wilcox.test(Goal3ObjectiveABaseMonth3$Goal3ObjectiveA.gpraAdultAll.KNOW_SA.y, Goal3ObjectiveABaseMonth3$Goal3ObjectiveA.gpraAdultAll.KNOW_SA.x, paired = TRUE, alternative  =c("greater"))
-
-count(Goal3ObjectiveABaseMonth3$Goal3ObjectiveA.gpraAdultAll.KNOW_SA.x)
-count(Goal3ObjectiveABaseMonth3$Goal3ObjectiveA.gpraAdultAll.KNOW_SA.y)
-## Need to create a spread for this.
-Goal3ObjectiveABaseMonth3 = data.frame(t(colMeans(Goal3ObjectiveABaseMonth3)))
-colnames(Goal3ObjectiveABaseMonth3) = c("Base", "Month3")
-Goal3ObjectiveABaseMonth3$Difference = (Goal3ObjectiveABaseMonth3$Month3-Goal3ObjectiveABaseMonth3$Base)/Goal3ObjectiveABaseMonth3$Base
-Goal3ObjectiveABaseMonth3 = round(Goal3ObjectiveABaseMonth3,2)
-write.csv(Goal3ObjectiveABaseMonth3 , "Goal3ObjectiveABaseMonth3.csv", row.names = FALSE)
-
-
-########## Goal 3 Objective B | Increase knowledge about HIV and VH by 20%.  KNOW_HIV #########################################################
-
-Goal3ObjectiveB =  data.frame(gpraAdultAll$KNOW_HIV.x, gpraAdultAll$KNOW_HIV.y, gpraAdultAll$KNOW_HIV)
-
-Goal3ObjectiveB = data.frame(apply(Goal3ObjectiveB, 2, function(x){ifelse(x == 98, NA, ifelse(x == 2, NA, x))}))
-summary(Goal3ObjectiveB)
-
-Goal3ObjectiveBBaseMonth3 = data.frame(Goal3ObjectiveB$gpraAdultAll.KNOW_HIV.x, Goal3ObjectiveB$gpraAdultAll.KNOW_HIV.y)
-Goal3ObjectiveBBaseMonth3 = na.omit(Goal3ObjectiveBBaseMonth3)
-Goal3ObjectiveBBaseMonth3 = data.frame(Goal3ObjectiveBBaseMonth3)
-## Here is the number of people that completed both
-dim(Goal3ObjectiveBBaseMonth3)
-
-head(Goal3ObjectiveBBaseMonth3)
-count(Goal3ObjectiveBBaseMonth3$Goal3ObjectiveB.gpraAdultAll.KNOW_HIV.x)
-count(Goal3ObjectiveBBaseMonth3$Goal3ObjectiveB.gpraAdultAll.KNOW_HIV.y)
-
-wilcox.test(Goal3ObjectiveBBaseMonth3$Goal3ObjectiveB.gpraAdultAll.KNOW_HIV.y, Goal3ObjectiveBBaseMonth3$Goal3ObjectiveB.gpraAdultAll.KNOW_HIV.x, paired = TRUE, alternative  =c("greater"))
-
-Goal3ObjectiveBBaseMonth3 = data.frame(t(colMeans(Goal3ObjectiveBBaseMonth3)))
-colnames(Goal3ObjectiveBBaseMonth3) = c("Base", "Month3")
-Goal3ObjectiveBBaseMonth3$Difference = (Goal3ObjectiveBBaseMonth3$Month3-Goal3ObjectiveBBaseMonth3$Base)/Goal3ObjectiveBBaseMonth3$Base
-Goal3ObjectiveBBaseMonth3 = round(Goal3ObjectiveBBaseMonth3, 2)
-write.csv(Goal3ObjectiveBBaseMonth3, "Goal3ObjectiveBBaseMonth3.csv", row.names = FALSE)
-
-
-
-##### Goal 3 Objective C RSKCIG, RSKMJ, RSKALC create a total compoiste scores ##### ##### ##### ##### ##### ##### ##### ##### ##### ##### #####  
-Goal3ObjectiveC = data.frame(gpraAdultAll$RSKCIG.x, gpraAdultAll$RSKCIG.y, gpraAdultAll$RSKCIG, gpraAdultAll$RSKMJ.x, gpraAdultAll$RSKMJ.y, gpraAdultAll$RSKMJ, gpraAdultAll$RSKALC.x, gpraAdultAll$RSKALC.y, gpraAdultAll$RSKALC)
-head(Goal3ObjectiveC)
-Goal3ObjectiveC  = data.frame(apply(Goal3ObjectiveC, 2, function(x){ifelse(x == 98, NA, ifelse(x == 97, NA, x))}))
-head(Goal3ObjectiveC)
-
-Goal3ObjectiveCBaseMonth3= data.frame(Goal3ObjectiveC$gpraAdultAll.RSKCIG.x, Goal3ObjectiveC$gpraAdultAll.RSKCIG.y, Goal3ObjectiveC$gpraAdultAll.RSKMJ.x, Goal3ObjectiveC$gpraAdultAll.RSKMJ.y, Goal3ObjectiveC$gpraAdultAll.RSKALC.x, Goal3ObjectiveC$gpraAdultAll.RSKALC.y)
-head(Goal3ObjectiveCBaseMonth3) 
-## Filter out NA's, then split apart for the summing then bring back together.
-Goal3ObjectiveCBaseMonth3  = na.omit(Goal3ObjectiveCBaseMonth3)
-Goal3ObjectiveCBaseMonth3  = data.frame(Goal3ObjectiveCBaseMonth3)
-head(Goal3ObjectiveCBaseMonth3)
-## Number for Base and Month3
-dim(Goal3ObjectiveCBaseMonth3)
-
-Goal3ObjectiveCBase = data.frame(Goal3ObjectiveCBaseMonth3$Goal3ObjectiveC.gpraAdultAll.RSKCIG.x, Goal3ObjectiveCBaseMonth3$Goal3ObjectiveC.gpraAdultAll.RSKMJ.x, Goal3ObjectiveCBaseMonth3$Goal3ObjectiveC.gpraAdultAll.RSKALC.x)
-head(Goal3ObjectiveCBase)
-Goal3ObjectiveCBase = data.frame(apply(Goal3ObjectiveCBase, 1, sum))
-colnames(Goal3ObjectiveCBase ) = c("SAHarmBase")
-head(Goal3ObjectiveCBase)
-dim(Goal3ObjectiveCBase)
-
-Goal3ObjectiveCMonth3 = data.frame(Goal3ObjectiveCBaseMonth3$Goal3ObjectiveC.gpraAdultAll.RSKCIG.y, Goal3ObjectiveCBaseMonth3$Goal3ObjectiveC.gpraAdultAll.RSKMJ.y, Goal3ObjectiveCBaseMonth3$Goal3ObjectiveC.gpraAdultAll.RSKALC.y)
-head(Goal3ObjectiveCMonth3)
-summary(Goal3ObjectiveCMonth3)
-Goal3ObjectiveCMonth3 = data.frame(apply(Goal3ObjectiveCMonth3, 1, sum))
-colnames(Goal3ObjectiveCMonth3 ) = c("SAHarmMonth3")
-head(Goal3ObjectiveCMonth3)
-dim(Goal3ObjectiveCMonth3)
-
-Goal3ObjectiveCBaseMonth3 = data.frame(Goal3ObjectiveCBase, Goal3ObjectiveCMonth3)
-head(Goal3ObjectiveCBaseMonth3)
-wilcox.test(Goal3ObjectiveCMonth3$SAHarmMonth3, Goal3ObjectiveCBase$SAHarmBase, paired = TRUE, alternative = c("greater"))
-
-Goal3ObjectiveCBaseMonth3 = data.frame(t(colMeans(Goal3ObjectiveCBaseMonth3)))
-colnames(Goal3ObjectiveCBaseMonth3) = c("Base", "Month3")
-Goal3ObjectiveCBaseMonth3$Difference = (Goal3ObjectiveCBaseMonth3$Month3-Goal3ObjectiveCBaseMonth3$Base)/Goal3ObjectiveCBaseMonth3$Base
-Goal3ObjectiveCBaseMonth3 = round(Goal3ObjectiveCBaseMonth3, 2)
-write.csv(Goal3ObjectiveCBaseMonth3, "Goal3ObjectiveCBaseMonth3.csv", row.names = FALSE)
-
-
-####### Goal 3 Objective D ######### ###################################################################################################
-# Grab these variables and change RSKANYSEX_UNP, RSKSEX_ALCDRG, RSKNDL_SHR change ObjectiveC to ObjectiveD, change SAHarm to HIVHarm 
-Goal3ObjectiveD= data.frame(gpraAdultAll$RSKANYSEX_UNP.x, gpraAdultAll$RSKANYSEX_UNP.y, gpraAdultAll$RSKANYSEX_UNP, gpraAdultAll$RSKSEX_ALCDRG.x, gpraAdultAll$RSKSEX_ALCDRG.y, gpraAdultAll$RSKSEX_ALCDRG, gpraAdultAll$RSKNDL_SHR.x, gpraAdultAll$RSKNDL_SHR.y, gpraAdultAll$RSKNDL_SHR)
-head(Goal3ObjectiveD)
-Goal3ObjectiveD = data.frame(apply(Goal3ObjectiveD, 2, function(x){ifelse(x == 98, NA, ifelse(x == 97, NA, x))}))
-head(Goal3ObjectiveD)
-
-Goal3ObjectiveDBaseMonth3= data.frame(Goal3ObjectiveD$gpraAdultAll.RSKANYSEX_UNP.x, Goal3ObjectiveD$gpraAdultAll.RSKANYSEX_UNP.y, Goal3ObjectiveD$gpraAdultAll.RSKSEX_ALCDRG.x, Goal3ObjectiveD$gpraAdultAll.RSKSEX_ALCDRG.y, Goal3ObjectiveD$gpraAdultAll.RSKNDL_SHR.x, Goal3ObjectiveD$gpraAdultAll.RSKNDL_SHR.y)
-head(Goal3ObjectiveDBaseMonth3) 
-## Filter out NA's, then split apart for the summing then bring back together.
-Goal3ObjectiveDBaseMonth3  = na.omit(Goal3ObjectiveDBaseMonth3)
-Goal3ObjectiveDBaseMonth3  = data.frame(Goal3ObjectiveDBaseMonth3)
-head(Goal3ObjectiveDBaseMonth3)
-
-Goal3ObjectiveDBase = data.frame(Goal3ObjectiveDBaseMonth3$Goal3ObjectiveD.gpraAdultAll.RSKANYSEX_UNP.x, Goal3ObjectiveDBaseMonth3$Goal3ObjectiveD.gpraAdultAll.RSKSEX_ALCDRG.x, Goal3ObjectiveDBaseMonth3$Goal3ObjectiveD.gpraAdultAll.RSKNDL_SHR.x)
-head(Goal3ObjectiveDBase)
-Goal3ObjectiveDBase = data.frame(apply(Goal3ObjectiveDBase, 1, sum, na.rm = TRUE))
-colnames(Goal3ObjectiveDBase ) = c("HIVHarmBase")
-head(Goal3ObjectiveDBase)
-dim(Goal3ObjectiveDBase)
-
-Goal3ObjectiveDMonth3 = data.frame(Goal3ObjectiveDBaseMonth3$Goal3ObjectiveD.gpraAdultAll.RSKANYSEX_UNP.y, Goal3ObjectiveDBaseMonth3$Goal3ObjectiveD.gpraAdultAll.RSKSEX_ALCDRG.y, Goal3ObjectiveDBaseMonth3$Goal3ObjectiveD.gpraAdultAll.RSKNDL_SHR.y)
-head(Goal3ObjectiveDMonth3)
-Goal3ObjectiveDMonth3 = data.frame(apply(Goal3ObjectiveDMonth3, 1, sum, na.rm = TRUE))
-colnames(Goal3ObjectiveDMonth3 ) = c("HIVHarmMonth3")
-head(Goal3ObjectiveDMonth3)
-dim(Goal3ObjectiveDMonth3)
-
-Goal3ObjectiveDBaseMonth3 = data.frame(Goal3ObjectiveDBase, Goal3ObjectiveDMonth3)
-head(Goal3ObjectiveDBaseMonth3)
-wilcox.test(Goal3ObjectiveDMonth3$HIVHarmMonth3, Goal3ObjectiveDBase$HIVHarmBase, paired = TRUE, alternative = c("greater"))
-
-Goal3ObjectiveDBaseMonth3 = data.frame(t(colMeans(Goal3ObjectiveDBaseMonth3)))
-colnames(Goal3ObjectiveDBaseMonth3) = c("Base", "Month3")
-Goal3ObjectiveDBaseMonth3$Difference = (Goal3ObjectiveDBaseMonth3$Month3-Goal3ObjectiveDBaseMonth3$Base)/Goal3ObjectiveDBaseMonth3$Base
-Goal3ObjectiveDBaseMonth3 = round(Goal3ObjectiveDBaseMonth3, 2)
-write.csv(Goal3ObjectiveDBaseMonth3, "Goal3ObjectiveDBaseMonth3.csv", row.names = FALSE)
-
-
-
-###### Goal 3 Objective E ###################### ##############################################################################################################
-Goal3ObjectiveEFP = data.frame(Year = gpraAdultAll$YEAR.x, YOB = 2018-gpraAdultAll$YOB.x,gpraAdultAll$INTERVENTION_A.x, gpraAdultAll$INTERVENTION_B.x, gpraAdultAll$INTERVENTION_C.x)
-Goal3ObjectiveEFP = data.frame(subset(Goal3ObjectiveEFP, gpraAdultAll.INTERVENTION_A.x ==78 | gpraAdultAll.INTERVENTION_B.x == 78 | gpraAdultAll.INTERVENTION_C.x == 78))
-head(Goal3ObjectiveEFP)
-### 2016 First then 2017 and get percentage change.
-Goal3ObjectiveEFP2016 = subset(Goal3ObjectiveEFP, YOB < 25 & Year == 2016)
-Goal3ObjectiveEFP2016= data.frame(Goal3ObjectiveEFP2016 )
-Goal3ObjectiveEFP2016=dim(Goal3ObjectiveEFP2016 )
-Goal3ObjectiveEFP2016= data.frame(Goal3ObjectiveEFP2016[1]) 
-colnames(Goal3ObjectiveEFP2016) = c("TestedFocusPopulation2016") 
-
-### 2017
-Goal3ObjectiveEFP2017= subset(Goal3ObjectiveEFP, YOB < 25 & Year == 2017)
-Goal3ObjectiveEFP2017= data.frame(Goal3ObjectiveEFP2017)
-Goal3ObjectiveEFP2017=dim(Goal3ObjectiveEFP2017)
-Goal3ObjectiveEFP2017= data.frame(Goal3ObjectiveEFP2017 [1]) 
-colnames(Goal3ObjectiveEFP2017) = c("TestedFocusPopulation2017")
-
-Goal3ObjectiveE = data.frame(Goal3ObjectiveEFP2017, Goal3ObjectiveEFP2016)
-head(Goal3ObjectiveE)
-Goal3ObjectiveE$Difference = (Goal3ObjectiveE$TestedFocusPopulation2017- Goal3ObjectiveE$TestedFocusPopulation2016)/ Goal3ObjectiveE$TestedFocusPopulation2016
-Goal3ObjectiveE = round(Goal3ObjectiveE,2)
-
-write.csv(Goal3ObjectiveE, "Goal3ObjectiveE.csv", row.names = FALSE)
-
-###### Goal 3 Objective G ############################################################################################ #########
-# Need to change the to just 2017 so need the year variable
-Goal3ObjectiveG = data.frame(YEAR.x = gpraAdultAll$YEAR.x,gpraAdultAll$INTERVENTION_A.x, gpraAdultAll$INTERVENTION_B.x, gpraAdultAll$INTERVENTION_C.x)
-Goal3ObjectiveG  = data.frame(subset(Goal3ObjectiveG , gpraAdultAll.INTERVENTION_A.x ==78 | gpraAdultAll.INTERVENTION_B.x == 78 | gpraAdultAll.INTERVENTION_C.x == 78))
-Goal3ObjectiveG  = data.frame(Goal3ObjectiveG)
-head(Goal3ObjectiveG)
-
-Goal3ObjectiveG2016  = data.frame(subset(Goal3ObjectiveG, YEAR.x == 2016))
-Goal3ObjectiveG2016  =dim(Goal3ObjectiveG2016)
-Goal3ObjectiveG2016  = Goal3ObjectiveG2016[1]
-
-Goal3ObjectiveG2017  = data.frame(subset(Goal3ObjectiveG, YEAR.x == 2017))
-Goal3ObjectiveG2017  =dim(Goal3ObjectiveG2017)
-Goal3ObjectiveG2017  = Goal3ObjectiveG2017[1]
-
-Goal3ObjectiveGIncrease = round(data.frame(Goal3ObjectiveGIncrease =(Goal3ObjectiveG2017-Goal3ObjectiveG2016)/ Goal3ObjectiveG2016),2)    
-Goal3ObjectiveG = data.frame(Goal3ObjectiveG2016  , Goal3ObjectiveG2017, Goal3ObjectiveGIncrease)
-colnames(Goal3ObjectiveG) = c("HIV Tested 2016", "HIV Tested 2017", "HIV Tested Increase") 
-write.csv(Goal3ObjectiveG, "Goal3ObjectiveG .csv", row.names = FALSE)
-
-
-###### Goal 3 Objective H ############################################################################################ #########
-# CIG30D, TOB30D, VAP30D, ALC30D, BINGE530D, MJ30D, ILL30D, RX30D, SPICE30D, INJECT30D  So sum these to create an overall days used substances in 30 days
-Goal3ObjectiveHBaseline3month = data.frame(gpraAdultAll$CIG30D.x,gpraAdultAll$VAP30D.x, gpraAdultAll$ALC30D.x, gpraAdultAll$BINGE530D.x, gpraAdultAll$MJ30D.x, gpraAdultAll$ILL30D.x, gpraAdultAll$RX30D.x, gpraAdultAll$SPICE30D.x, gpraAdultAll$INJECT30D.x, gpraAdultAll$CIG30D.y,gpraAdultAll$VAP30D.y, gpraAdultAll$ALC30D.y, gpraAdultAll$BINGE530D.y, gpraAdultAll$MJ30D.y, gpraAdultAll$ILL30D.y, gpraAdultAll$RX30D.y, gpraAdultAll$SPICE30D.y, gpraAdultAll$INJECT30D.y)            
-Goal3ObjectiveHBaseline3month = data.frame(apply(Goal3ObjectiveHBaseline3month, 2, function(x){ifelse(x == 98, NA, ifelse(x == 97, NA, x))}))
-Goal3ObjectiveHBaseline3month = data.frame(na.omit(Goal3ObjectiveHBaseline3month))
-## Number of people here
-dim(Goal3ObjectiveHBaseline3month) 
-Goal3ObjectiveHBase =(Goal3ObjectiveHBaseline3month[,1:9])
-head(Goal3ObjectiveHBase)
-Goal3ObjectiveHBase = data.frame(apply(Goal3ObjectiveHBase, 1, sum))
-colnames(Goal3ObjectiveHBase) = c("Goal3ObjectiveHBase")
-head(Goal3ObjectiveHBase)
-# Here for number of matched people 
-dim(Goal3ObjectiveHBase)
-
-Goal3ObjectiveH3month =(Goal3ObjectiveHBaseline3month[,10:18])
-head(Goal3ObjectiveH3month)
-# Here for number of matched people 
-dim(Goal3ObjectiveH3month)
-Goal3ObjectiveH3month = data.frame(apply(Goal3ObjectiveH3month, 1, sum))
-colnames(Goal3ObjectiveH3month) = c("Goal3ObjectiveH3month")
-head(Goal3ObjectiveH3month)
-
-wilcox.test(Goal3ObjectiveH3month$Goal3ObjectiveH3month, Goal3ObjectiveHBase$Goal3ObjectiveHBase, paired = TRUE, alternative = c("less"))
-
-Goal3ObjectiveHBaseMonth3 = data.frame(Goal3ObjectiveHBase, Goal3ObjectiveH3month)
-describe(Goal3ObjectiveHBaseMonth3)
-Goal3ObjectiveHBaseMonth3 =  data.frame(t(colMeans(Goal3ObjectiveHBaseMonth3)))
-colnames(Goal3ObjectiveHBaseMonth3) = c("Base", "Month3")
-Goal3ObjectiveHBaseMonth3$Difference = round((Goal3ObjectiveHBaseMonth3$Month3-Goal3ObjectiveHBaseMonth3$Base)/Goal3ObjectiveHBaseMonth3$Base,2)
-write.csv(Goal3ObjectiveHBaseMonth3, "Goal3ObjectiveHBaseMonth3.csv", row.names = FALSE)
-
-
-####################### Objective I ################ ################ ################ ################ ################ ################ ##############
-#CNTRL_REFUSEMOOD CNTRL_WAITCNDM CNTRL_TREAT CNTRL_SEXPRAC CNTRL_ASKCNDM CNTRL_REFUSECNDM
-Goal3ObjectiveIBaseline3month= data.frame(gpraAdultAll$CNTRL_REFUSEMOOD.x, gpraAdultAll$CNTRL_WAITCNDM.x, gpraAdultAll$CNTRL_TREAT.x, gpraAdultAll$CNTRL_SEXPRAC.x, gpraAdultAll$CNTRL_ASKCNDM.x, gpraAdultAll$CNTRL_REFUSECNDM.x, gpraAdultAll$CNTRL_REFUSEMOOD.y, gpraAdultAll$CNTRL_WAITCNDM.y, gpraAdultAll$CNTRL_TREAT.y, gpraAdultAll$CNTRL_SEXPRAC.y, gpraAdultAll$CNTRL_ASKCNDM.y, gpraAdultAll$CNTRL_REFUSECNDM.y)
-Goal3ObjectiveIBaseline3month = data.frame(apply(Goal3ObjectiveIBaseline3month, 2, function(x){ifelse(x == 98, NA, ifelse(x == 97, NA, x))}))
-Goal3ObjectiveIBaseline3month = data.frame(na.omit(Goal3ObjectiveIBaseline3month))
-summary(Goal3ObjectiveIBaseline3month)
-## Number of people here
-dim(Goal3ObjectiveIBaseline3month) 
-Goal3ObjectiveIBase =(Goal3ObjectiveIBaseline3month[,1:6])
-head(Goal3ObjectiveIBase)
-Goal3ObjectiveIBase = data.frame(apply(Goal3ObjectiveIBase, 1, sum))
-colnames(Goal3ObjectiveIBase) = c("Goal3ObjectiveIBase")
-head(Goal3ObjectiveIBase)
-
-Goal3ObjectiveI3month =(Goal3ObjectiveIBaseline3month[,7:12])
-head(Goal3ObjectiveI3month)
-Goal3ObjectiveI3month = data.frame(apply(Goal3ObjectiveI3month, 1, sum))
-
-
-colnames(Goal3ObjectiveI3month) = c("Goal3ObjectiveI3month")
-head(Goal3ObjectiveI3month)
-
-wilcox.test(Goal3ObjectiveI3month$Goal3ObjectiveI3month, Goal3ObjectiveIBase$Goal3ObjectiveIBase, paired = TRUE, alternative = c("greater"))
-
-Goal3ObjectiveIBaseMonth3 = data.frame(Goal3ObjectiveIBase, Goal3ObjectiveI3month)
-Goal3ObjectiveIBaseMonth3 =  data.frame(t(colMeans(Goal3ObjectiveIBaseMonth3)))
-colnames(Goal3ObjectiveIBaseMonth3) = c("Base", "Month3")
-Goal3ObjectiveIBaseMonth3$Difference = round((Goal3ObjectiveIBaseMonth3$Month3-Goal3ObjectiveIBaseMonth3$Base)/Goal3ObjectiveIBaseMonth3$Base,2)
-write.csv(Goal3ObjectiveIBaseMonth3, "Goal3ObjectiveIBaseMonth3.csv", row.names = FALSE)
-
-#### Goal 3 Objective I Base to Month 6 ########## ######################################################################
-# Need to change y to not .y.  Change Month3 to Month6
-Goal3ObjectiveIBaselineMonth6= data.frame(gpraAdultAll$CNTRL_REFUSEMOOD.x, gpraAdultAll$CNTRL_WAITCNDM.x, gpraAdultAll$CNTRL_TREAT.x, gpraAdultAll$CNTRL_SEXPRAC.x, gpraAdultAll$CNTRL_ASKCNDM.x, gpraAdultAll$CNTRL_REFUSECNDM.x, gpraAdultAll$CNTRL_REFUSEMOOD, gpraAdultAll$CNTRL_WAITCNDM, gpraAdultAll$CNTRL_TREAT, gpraAdultAll$CNTRL_SEXPRAC, gpraAdultAll$CNTRL_ASKCNDM, gpraAdultAll$CNTRL_REFUSECNDM)
-Goal3ObjectiveIBaselineMonth6 = data.frame(apply(Goal3ObjectiveIBaselineMonth6, 2, function(x){ifelse(x == 98, NA, ifelse(x == 97, NA, x))}))
-Goal3ObjectiveIBaselineMonth6 = data.frame(na.omit(Goal3ObjectiveIBaselineMonth6))
-summary(Goal3ObjectiveIBaselineMonth6)
-## Number of people here
-dim(Goal3ObjectiveIBaselineMonth6) 
-Goal3ObjectiveIBase =(Goal3ObjectiveIBaselineMonth6[,1:6])
-head(Goal3ObjectiveIBase)
-Goal3ObjectiveIBase = data.frame(apply(Goal3ObjectiveIBase, 1, sum))
-colnames(Goal3ObjectiveIBase) = c("Goal3ObjectiveIBase")
-head(Goal3ObjectiveIBase)
-
-Goal3ObjectiveIMonth6 =(Goal3ObjectiveIBaselineMonth6[,7:12])
-head(Goal3ObjectiveIMonth6)
-Goal3ObjectiveIMonth6 = data.frame(apply(Goal3ObjectiveIMonth6, 1, sum))
-
-
-colnames(Goal3ObjectiveIMonth6) = c("Goal3ObjectiveIMonth6")
-head(Goal3ObjectiveIMonth6)
-
-wilcox.test(Goal3ObjectiveIMonth6$Goal3ObjectiveIMonth6, Goal3ObjectiveIBase$Goal3ObjectiveIBase, paired = TRUE, alternative = c("greater"))
-
-Goal3ObjectiveIBaseMonth6 = data.frame(Goal3ObjectiveIBase, Goal3ObjectiveIMonth6)
-Goal3ObjectiveIBaseMonth6 =  data.frame(t(colMeans(Goal3ObjectiveIBaseMonth6)))
-colnames(Goal3ObjectiveIBaseMonth6) = c("Base", "Month6")
-Goal3ObjectiveIBaseMonth6$Difference = round((Goal3ObjectiveIBaseMonth6$Month6-Goal3ObjectiveIBaseMonth6$Base)/Goal3ObjectiveIBaseMonth6$Base,2)
-write.csv(Goal3ObjectiveIBaseMonth6, "Goal3ObjectiveIBaseMonth6.csv", row.names = FALSE)
-
-#### Goal 3 Objective I SIS ############## ######################################################################
-#SIS Reflective Post-Test
-SISData = read.spss("S:/Indiana Research & Evaluation/CCPE/CCPE SPSS - Datasets/SIS Reflective Post-Test.sav", use.value.labels = FALSE, to.data.frame = TRUE)
-
-SISData = data.frame(na.omit(SISData))
-dim(SISData)
-summary(SISData)
-# Current goes from 3 to 14
-SISDataCurrent = SISData[,3:14]
-SISDataCurrent = data.frame(apply(SISDataCurrent, 1, mean))
-colnames(SISDataCurrent) = c("SISDataCurrent")
-head(SISDataCurrent)
-# Before is 15 to 26
-
-SISDataBefore= SISData[,15:26]
-SISDataBefore= data.frame(apply(SISDataBefore, 1, mean))
-colnames(SISDataBefore) = c("SISDataBefore")
-head(SISDataBefore)
-SISData = data.frame(SISDataBefore, SISDataCurrent)
-wilcox.test(SISData$SISDataCurrent, SISData$SISDataBefore, paired = TRUE, alternative = c("greater"))
-
-SISData = data.frame(t(colMeans(SISData)))
-SISData$Difference = (SISData$SISDataCurrent-SISData$SISDataBefore) / SISData$SISDataBefore
-SISData = round(SISData,2)
-write.csv(SISData, "SISData.csv", row.names = TRUE)
-#######Goal 3 Objective J ########################################### ########################################### ###########################################
-# JAILTIME_N  Change 98 to missing 99 to 0 else to 1.  
-Goal3ObjectiveJBaseMonth3 = data.frame(gpraAdultAll$JAILTIME_N.x, gpraAdultAll$JAILTIME_N.y)
-Goal3ObjectiveJBaseMonth3 = data.frame(apply(Goal3ObjectiveJBaseMonth3, 2, function(x){ifelse(x == 98, NA, ifelse( x == 99, 0, 1))}))
-Goal3ObjectiveJBaseMonth3 = data.frame(na.omit(Goal3ObjectiveJBaseMonth3))
-dim(Goal3ObjectiveJBaseMonth3)
-head(Goal3ObjectiveJBaseMonth3)
-count(Goal3ObjectiveJBaseMonth3$Goal3ObjectiveJBaseMonth3)
-summary(Goal3ObjectiveJ)
-## There are no new cases of people being in jail from baseline to month 3
-
-
-
-####### Goal 3 Objective K ########################################### ########################################### ###########################################
-# Use LIFE_RESP_SERV
-Goal3ObjectiveKBaseMonth3 = data.frame(gpraAdultAll$LIFE_RESP_SERV.x, gpraAdultAll$LIFE_RESP_SERV.y)
-Goal3ObjectiveKBaseMonth3 = data.frame(apply(Goal3ObjectiveKBaseMonth3, 2, function(x){ifelse(x == 98, NA, ifelse(x == 99, NA, x))}))
-summary(Goal3ObjectiveKBaseMonth3)
-Goal3ObjectiveKBaseMonth3 = data.frame(na.omit(Goal3ObjectiveKBaseMonth3))
-colnames(Goal3ObjectiveKBaseMonth3) = c("Base", "Month3")
-dim(Goal3ObjectiveKBaseMonth3)
-wilcox.test(Goal3ObjectiveKBaseMonth3$Month3, Goal3ObjectiveKBaseMonth3$Base, paired = TRUE, alternative = c("less"))
-
-Goal3ObjectiveKBaseMonth3 =  data.frame(t(colMeans(Goal3ObjectiveKBaseMonth3)))
-colnames(Goal3ObjectiveKBaseMonth3) = c("Base", "Month3")
-Goal3ObjectiveKBaseMonth3$Difference = round((Goal3ObjectiveKBaseMonth3$Month3-Goal3ObjectiveKBaseMonth3$Base)/Goal3ObjectiveKBaseMonth3$Base,2)
-Goal3ObjectiveKBaseMonth3 = round(Goal3ObjectiveKBaseMonth3,2)
-write.csv(Goal3ObjectiveKBaseMonth3, "Goal3ObjectiveKBaseMonth3.csv", row.names = FALSE)
-
-##### Objective L ########################## ###############################################################################################################################
-## STDHx and subset by year if any data and then compare by year.  No year so need to merge the GPRA with pocket then grab year from GPRA with the one variable here
-# LASTSEX_UNP Getting the number of people with unprotected and want to reduce that so 1 =0 and 2 = 1
-Goal3ObjectiveMBaseMonth3 = data.frame(gpraAdultAll$LASTSEX_UNP.x, gpraAdultAll$LASTSEX_UNP.y)
-Goal3ObjectiveMBaseMonth3 = data.frame(apply(Goal3ObjectiveMBaseMonth3, 2, function(x){ifelse(x == 98, NA, ifelse(x == 99, NA, x))}))
-Goal3ObjectiveMBaseMonth3 = data.frame(na.omit(Goal3ObjectiveMBaseMonth3))
-Goal3ObjectiveMBaseMonth3 = data.frame(apply(Goal3ObjectiveMBaseMonth3, 2, function(x){ifelse(x == 1, 0, 1)}))
-# Here for number of people
-dim(Goal3ObjectiveMBaseMonth3)
-summary(Goal3ObjectiveMBaseMonth3)
-colnames(Goal3ObjectiveMBaseMonth3) = c("Base", "Month3")
-wilcox.test(Goal3ObjectiveMBaseMonth3$Month3, Goal3ObjectiveMBaseMonth3$Base, paired = TRUE, alternative = c("less"))
-count(Goal3ObjectiveMBaseMonth3$Base)
-count(Goal3ObjectiveMBaseMonth3$Month3)
-
-Goal3ObjectiveMBaseMonth3 = data.frame(t(colMeans(Goal3ObjectiveMBaseMonth3)))
-Goal3ObjectiveMBaseMonth3$Difference = (Goal3ObjectiveMBaseMonth3$Month3-Goal3ObjectiveMBaseMonth3$Base) / Goal3ObjectiveMBaseMonth3$Base
-Goal3ObjectiveMBaseMonth3 = round(Goal3ObjectiveMBaseMonth3, 2)
-write.csv(Goal3ObjectiveMBaseMonth3, "Goal3ObjectiveMBaseMonth3.csv", row.names = FALSE)
-
-
-####### Goal 3 Objective M ########################################### ########################################### ###########################################
-# Using the pocket screener.  
-Goal3ObjectiveMBaseMonth3 = cbind(baseExchange = gpraAdultAll$WHENSEX4STFF_UNP.x, month3Exchange = gpraAdultAll$WHENSEX4STFF_UNP.y)
-
-write.csv(Goal3ObjectiveMBaseMonth3, "Goal3ObjectiveMBaseMonth3.csv", row.names = FALSE)
-Goal3ObjectiveMBaseMonth3 = read.csv("Goal3ObjectiveMBaseMonth3.csv", header = TRUE, na.strings = c(NA, 98, 99))
-Goal3ObjectiveMBaseMonth3 = na.omit(Goal3ObjectiveMBaseMonth3)
-apply(Goal3ObjectiveMBaseMonth3, 2, sum)
-##### CCPE Grant Summary Report Data ######## ########################################################################################
-##### Project Objectives ################### ###############################################################################################
-InternAdult = data.frame(gpraAdultAll$YEAR.x, gpraAdultAll$INTERVENTION_A.x, gpraAdultAll$INTERVENTION_B.x, gpraAdultAll$INTERVENTION_C.x)
-RapidAdult = data.frame(subset(InternAdult, gpraAdultAll.INTERVENTION_A.x ==78 | gpraAdultAll.INTERVENTION_B.x == 78 | gpraAdultAll.INTERVENTION_C.x == 78))
-summary(RapidAdult)
-RapidAdult = data.frame(subset(RapidAdult, gpraAdultAll.YEAR.x == 2017))
-RapidAdult = dim(RapidAdult)
-RapidAdult = RapidAdult[1]
-RapidAdult 
-
-# For Increase confidence in assertive communication skills see Goal 3 Objective I SIS 
-# For Increase knowledge about HIV and substance abuse and decrease risky behaviors that could lead to HIV/AIDS and substance abuse.  																			
-# use ####### Goal 3 Objective A and B #####
-# For Increase protected sex and improve attitudes towards condom use  ##### Objective M ##### 																			
-
-##### Grant Summary Report Demographics ###################################### ##########################################
-# Current enrollment totalCCPE to tracking sheet
-# Gender Male = 1; Female = 2; Other Gender Identity 3 and 4 
+### Goal 1 Objective B ##### 
+# 4-9 are housed
+Goal1ObjectiveB = data.frame(GPRAAll$Living.y)
+Goal1ObjectiveB = data.frame(apply(Goal1ObjectiveB, 2, function(x){ifelse(x == 4, 1, ifelse(x == 5, 1, ifelse(x == 6, 1, ifelse(x == 7, 1, ifelse(x == 8, 1, ifelse(x == 9, 1, 0))))))}))
 library(plyr)
-gender = data.frame(gpraAdultAll$GENDER.x)
-describe.factor(gender)
+Goal1ObjectiveB = data.frame(count(Goal1ObjectiveB))
+n = data.frame(apply(Goal1ObjectiveB, 2, sum))
+n = n[2,1]
+Goal1ObjectiveB$Percent = Goal1ObjectiveB$freq/n
+Goal1ObjectiveB
 
-# Ethnicity # Need to combine hispanic E_MEXICAN, E_PUERTRICAN, E_CUBAN, E_OTHERHISPAN
-# Need to combine all Asian R_ASIAIN_N, R_CHINESE_N, R_JAPAN_N, R_KOR_N, R_VIETNAM_N, R_OTHERASIA_N
-# Then grab black and white and get rid of NA's so the total correct
-# Need to include this E_NONHISPAN and change 0 to 1 and 1 to 0
-n = dim(gpraAdultAll)[1]
-hispanic = data.frame(gpraAdultAll$E_NONHISPAN.x)
-describe.factor(hispanic)
+##### Goal 1 Objective D ##### ##### ##### ##### ##### ##### ##### ##### ##### #####  ##### ##### ##### ##### ##### 
+## Grab total number of people with a part ID.  Then subset to only people in 2017 for QPRY2Q4.  Need to get the year and month
+# Total
+Goal1ObjectiveConn = data.frame(GPRAAll$ParticipantID)
+Goal1ObjectiveConn  = dim(Goal1ObjectiveConn)
+Goal1ObjectiveConn = data.frame(Goal1ObjectiveConn[1])
+colnames(Goal1ObjectiveConn) = c("Total Enrolled")
+write.csv(Goal1ObjectiveConn, "Goal1ObjectiveConn.csv", row.names = FALSE)
 
-###### Now Asian ###### ###### ###### ###### ###### 
-asian = data.frame(gpraAdultAll$R_ASIAIN_N.x, gpraAdultAll$R_CHINESE_N.x, gpraAdultAll$R_JAPAN_N.x, gpraAdultAll$R_KOR_N.x, gpraAdultAll$R_VIETNAM_N.x, gpraAdultAll$R_OTHERASIA_N.x)
-asian = data.frame(apply(asian, 2, function(x){ifelse(x == 98, NA, x)}))
-asian = data.frame(apply(asian, 1, sum))
-asian = data.frame(apply(asian, 1, function(x){ifelse(x > 0,1, 0)}))
-describe.factor(asian)
+# Year 1
+Goal1ObjectiveConn = data.frame(GPRAAll$ParticipantID)
+Goal1ObjectiveConn = data.frame(subset(Goal1ObjectiveConn, GPRAAll.ParticipantID < 2000))
+Goal1ObjectiveConn  = dim(Goal1ObjectiveConn)
+Goal1ObjectiveConn = data.frame(Goal1ObjectiveConn[1])
+colnames(Goal1ObjectiveConn) = c("Total Enrolled")
+write.csv(Goal1ObjectiveConn, "Goal1ObjectiveConn.csv", row.names = FALSE)
+
+### Year 2
+Goal1ObjectiveConn = data.frame(GPRAAll$ParticipantID)
+Goal1ObjectiveConn = data.frame(subset(Goal1ObjectiveConn, GPRAAll.ParticipantID > 1999 & GPRAAll.ParticipantID < 3000))
+Goal1ObjectiveConn  = dim(Goal1ObjectiveConn)
+Goal1ObjectiveConn = data.frame(Goal1ObjectiveConn[1])
+colnames(Goal1ObjectiveConn) = c("Total Enrolled")
+write.csv(Goal1ObjectiveConn, "Goal1ObjectiveConn.csv", row.names = FALSE)
+
+#### Year 3
+Goal1ObjectiveConn = data.frame(GPRAAll$ParticipantID)
+Goal1ObjectiveConn = data.frame(subset(Goal1ObjectiveConn, GPRAAll.ParticipantID > 2999))
+Goal1ObjectiveConn  = dim(Goal1ObjectiveConn)
+Goal1ObjectiveConn = data.frame(Goal1ObjectiveConn[1])
+colnames(Goal1ObjectiveConn) = c("Total Enrolled")
+write.csv(Goal1ObjectiveConn, "Goal1ObjectiveConn.csv", row.names = FALSE)
+
+### Goal 3 Objective A ####### ####################################################################################
+# Need to find the substance abuse variables and look at reductions AnyAlcohol
+DAUseAlcoholDays.x = data.frame(GPRAAll$DAUseAlcoholDays.x)
+DAUseAlcoholDays.y = data.frame(GPRAAll$DAUseAlcoholDays.y)
+
+Goal3ObjectiveA = data.frame(DAUseAlcoholDays.x, DAUseAlcoholDays.y)
+summary(Goal3ObjectiveA)
+colnames(Goal3ObjectiveA) =c("DAUseAlcoholDays.x", "DAUseAlcoholDays.y")
+Goal3ObjectiveA  = data.frame(apply(Goal3ObjectiveA, 2, function(x){ifelse(x < 0, NA, x)}))
+Goal3ObjectiveA  = data.frame(Goal3ObjectiveA)
+Goal3ObjectiveA  = na.omit(Goal3ObjectiveA)
+dim(Goal3ObjectiveA)
+summary(Goal3ObjectiveA)
 
 
-#### R_BLACK_N ######## ################################################################
-black = data.frame(gpraAdultAll$R_BLACK_N.x)
-black = data.frame(apply(black, 2, function(x){ifelse(x == 98, NA, x)}))
-describe.factor(black)
+# I think I alter this data to have 1's and zero's 
+write.csv(Goal3ObjectiveA, "Goal3ObjectiveA.csv", row.names = FALSE)
+Goal3ObjectiveA = read.csv("Goal3ObjectiveA.csv", header = TRUE)
+#Goal3ObjectiveA  = data.frame(apply(Goal3ObjectiveA, 2, function(x){ifelse(x > 0, 1, 0)}))
+summary(Goal3ObjectiveA)
+# Want to see baseline go down so see X go down relative to y so x less y
+wilcox.test(Goal3ObjectiveA$DAUseAlcoholDays.y,Goal3ObjectiveA$DAUseAlcoholDays.x, paired = TRUE, alternative  =c("less"))
+
+Goal3ObjectiveA = t(data.frame(colMeans(Goal3ObjectiveA)))
+colnames(Goal3ObjectiveA) = c("Base", "Month6")
+Goal3ObjectiveA = data.frame(Goal3ObjectiveA)
+Goal3ObjectiveA$Difference = (Goal3ObjectiveA$Month6-Goal3ObjectiveA$Base)/Goal3ObjectiveA$Base
+Goal3ObjectiveA = round(Goal3ObjectiveA,2)
 
 
-####### White ################# ################# ####################################################################
-white = data.frame(gpraAdultAll$R_WHITE_N.x)
-white = data.frame(apply(white, 2, function(x){ifelse(x == 98, NA, x)}))
-describe.factor(white)
+### Goal 3 Objective A for Drugs ####### ###############################################################
+### Need to get rid of NAs then sum for each variable, which means separating out the variables then recombing them.
+Goal3ObjectiveADrugs = data.frame(GPRAAll$DAUseIllegDrugsDays.x, GPRAAll$CocaineCrackDays.x, GPRAAll$MarijuanaHashDays.x, GPRAAll$OpiatesHeroinDays.x,  GPRAAll$OpiatesMorphineDays.x,GPRAAll$OpiatesDiluadidDays.x, GPRAAll$OpiatesDemerolDays.x, GPRAAll$OpiatesPercocetDays.x, GPRAAll$OpiatesDarvonDays.x, GPRAAll$OpiatesCodeineDays.x, GPRAAll$OpiatesOxycoDays.x, GPRAAll$NonPresMethadoneDays.x, GPRAAll$HallucPsychDays.x,  GPRAAll$MethamDays.x,  GPRAAll$BenzodiazepinesDays.x, GPRAAll$BarbituatesDays.x, GPRAAll$NonPrescGhbDays.x, GPRAAll$KetamineDays.x, GPRAAll$OtherTranquilizersDays.x, GPRAAll$InhalantsDays.x, GPRAAll$OtherIllegalDrugsDays.x, GPRAAll$DAUseIllegDrugsDays.y, GPRAAll$CocaineCrackDays.y, GPRAAll$MarijuanaHashDays.y, GPRAAll$OpiatesHeroinDays.y,  GPRAAll$OpiatesMorphineDays.y,GPRAAll$OpiatesDiluadidDays.y, GPRAAll$OpiatesDemerolDays.y, GPRAAll$OpiatesPercocetDays.y, GPRAAll$OpiatesDarvonDays.y, GPRAAll$OpiatesCodeineDays.y, GPRAAll$OpiatesOxycoDays.y, GPRAAll$NonPresMethadoneDays.y, GPRAAll$HallucPsychDays.y,  GPRAAll$MethamDays.y,  GPRAAll$BenzodiazepinesDays.y, GPRAAll$BarbituatesDays.y, GPRAAll$NonPrescGhbDays.y, GPRAAll$KetamineDays.y, GPRAAll$OtherTranquilizersDays.y, GPRAAll$InhalantsDays.y, GPRAAll$OtherIllegalDrugsDays.y)
+typeof(Goal3ObjectiveADrugs)
+write.csv(Goal3ObjectiveADrugs, "Goal3ObjectiveADrugs.csv", row.names = FALSE)
+Goal3ObjectiveADrugs = read.csv("Goal3ObjectiveADrugs.csv", header = TRUE)
+# It is ok to make everything NA zero, because we are summing.
+Goal3ObjectiveADrugs = data.frame(apply(Goal3ObjectiveADrugs, 2, function(x){ifelse(x < 0, 0, x)}))
+Goal3ObjectiveADrugs = data.frame(na.omit(Goal3ObjectiveADrugs))
+summary(Goal3ObjectiveADrugs)
+Goal3ObjectiveADrugs = data.frame(na.omit(Goal3ObjectiveADrugs))
+dim(Goal3ObjectiveADrugs)
+summary(Goal3ObjectiveADrugs)
+# Grab first 21 for baseline then last 21 for six month sum and then bring together and look at difference
+Goal3ObjectiveADrugsBase = data.frame(Goal3ObjectiveADrugs[,1:21])
+summary(Goal3ObjectiveADrugsBase)
+Goal3ObjectiveADrugsBase = rowSums(Goal3ObjectiveADrugsBase)
 
-######################## Education Level ################################################################################ 
-# 2 = Middle school
-#3 = High school
-#4= Community college or technical or trade school
-#5= Four-year college
-#6= Beyond four-year college
+Goal3ObjectiveADrugsMonth6 = Goal3ObjectiveADrugs[,22:42]
+Goal3ObjectiveADrugsMonth6 = data.frame(apply(Goal3ObjectiveADrugsMonth6, 1, sum))
+colnames(Goal3ObjectiveADrugsMonth6) = c("Month6")
+head(Goal3ObjectiveADrugsMonth6)
+Goal3ObjectiveADrugs =data.frame(Goal3ObjectiveADrugsBase, Goal3ObjectiveADrugsMonth6)
+colnames(Goal3ObjectiveADrugs) = c("Base", "Month6")
+wilcox.test(Goal3ObjectiveADrugs$Month6, Goal3ObjectiveADrugs$Base, paired = TRUE, alternative = c("less"))
+Goal3ObjectiveADrugs = data.frame(t(colMeans(Goal3ObjectiveADrugs)))
+Goal3ObjectiveADrugs
+Goal3ObjectiveADrugs$Difference  = (Goal3ObjectiveADrugs$Month6-Goal3ObjectiveADrugs$Base)/Goal3ObjectiveADrugs$Base
+Goal3ObjectiveADrugs = round(Goal3ObjectiveADrugs,2)
+####### Goal 3 Objective B ####### #############################################################################
+# Grab PHQ-9 and GAD-7 scores for this indicator.
+
+# Get BaseMonth6 and then repeat for BaseMonth12
+PHQ9BaseMonth6 = data.frame(PHQ9All$PHQ9Total.x, PHQ9All$PHQ9Total.y)
+summary(PHQ9BaseMonth6)
+dim(PHQ9BaseMonth6)
+PHQ9BaseMonth6 = data.frame(na.omit(PHQ9BaseMonth6))
+colnames(PHQ9BaseMonth6) =c("Base", "Month6")
+dim(PHQ9BaseMonth6)
+head(PHQ9BaseMonth6)
+write.csv(PHQ9BaseMonth6, "PHQ9BaseMonth6.csv", row.names = FALSE)
+PHQ9BaseMonth6 = read.csv("PHQ9BaseMonth6.csv", header = TRUE)
+wilcox.test(PHQ9BaseMonth6$Month6, PHQ9BaseMonth6$Base, paired = TRUE, alternative = c("less"))
+PHQ9BaseMonth6 = colMeans(PHQ9BaseMonth6)
+PHQ9BaseMonth6 = data.frame(t(PHQ9BaseMonth6))
+PHQ9BaseMonth6$Difference = (PHQ9BaseMonth6$Month6-PHQ9BaseMonth6$Base)/ PHQ9BaseMonth6$Base
+PHQ9BaseMonth6 = round(PHQ9BaseMonth6,2)
+write.csv(PHQ9BaseMonth6, "PHQ9BaseMonth6.csv", row.names = FALSE)
+
+## Just replace PHQ9 with GAD7
+head(GAD7All)
+GAD7BaseMonth6 = data.frame(GAD7All$GAD7Total.x, GAD7All$GAD7Total.y)
+summary(GAD7BaseMonth6)
+dim(GAD7BaseMonth6)
+GAD7BaseMonth6 = data.frame(na.omit(GAD7BaseMonth6))
+colnames(GAD7BaseMonth6) =c("Base", "Month6")
+dim(GAD7BaseMonth6)
+head(GAD7BaseMonth6)
+wilcox.test(GAD7BaseMonth6$Month6, GAD7BaseMonth6$Base, paired = TRUE, alternative = c("less"))
+GAD7BaseMonth6 = colMeans(GAD7BaseMonth6)
+GAD7BaseMonth6 = data.frame(t(GAD7BaseMonth6))
+GAD7BaseMonth6$Difference = (GAD7BaseMonth6$Month6-GAD7BaseMonth6$Base)/ GAD7BaseMonth6$Base
+GAD7BaseMonth6 = round(GAD7BaseMonth6,2)
+write.csv(GAD7BaseMonth6, "GAD7BaseMonth6.csv", row.names = FALSE)
+
+#### Goal 3 Objective C ######## ######## ################################################
+## First need to figure who is a yes for the inpaitent stuff and who is a no.  Include the parID.  Then 
+# Once I know who is a yes and no with part ID for all of the variables that I want to combine, then 
+# I get rid of the missing data.  Then once the missing data is gone I merge the times variables by ID.  Then I know
+# if there is a missing value for the times variable it is a no and not a missing and I can put a zero.
+# What variables to include.  Not using DrugRelated, because almost all of the data is coded as missing. 
+# So instead just using general variable TimesCrime as the crime indicator.
+# So need to change the variables names in the loading data 
 
 
-edu = data.frame(gpraAdultAll$EDLEVEL_N.x)
-edu = na.omit(edu)
-describe.factor(edu, decr.order = FALSE)
+Goal3ObjectiveCBaseMonth6 = data.frame(ClientID = GPRAAll$ClientID, GPRAAll$InpatientAlcoholSA.x, GPRAAll$InpatientAlcoholSA.y, GPRAAll$OutpatientAlcoholSA.x, GPRAAll$OutpatientAlcoholSA.y, GPRAAll$ERAlcoholSA.x, GPRAAll$ERAlcoholSA.y)
+summary(Goal3ObjectiveCBaseMonth6)
+Goal3ObjectiveCBaseMonth6 = data.frame(na.omit(Goal3ObjectiveCBaseMonth6))
 
-dim(gpraAdultAll)
-edu = na.omit(edu)
-eduN = dim(edu)[1]
-edu = count(edu)
-rownames(edu) = c("High School", "Community College", "Four-year college", "Beyond four-year college")
+Goal3ObjectiveCBaseMonth6Times = data.frame(ClientID = GPRAAll$ClientID,GPRAAll$InpatientAlcoholSANights.x, GPRAAll$InpatientAlcoholSANights.y, GPRAAll$OutpatientAlcoholSATimes.x, GPRAAll$OutpatientAlcoholSATimes.y, GPRAAll$ERAlcoholSATimes.x, GPRAAll$ERAlcoholSATimes.y)
+Goal3ObjectiveCBaseMonth6 = merge(Goal3ObjectiveCBaseMonth6 , Goal3ObjectiveCBaseMonth6Times , by = "ClientID", all.x = TRUE)
 
-edu$Percentage = edu$freq / eduN
-edu = round(edu, 2); edu
-########### Age ################################## ########################################################################
-ageAdult = data.frame(gpraAdultAll$YOB.x)
-colnames(ageAdult) = c("YOB")
-ageYouth = data.frame(gpraYouthAll$YOB.x)
-colnames(ageYouth) = c("YOB")
-age = rbind(ageAdult, ageYouth)
-age = data.frame(apply(age, 2, function(x){ifelse(x == 98, NA, x)}))
-age = data.frame(age = 2018-age)
-age = data.frame(na.omit(age))
+head(Goal3ObjectiveCBaseMonth6)
+summary(Goal3ObjectiveCBaseMonth6)
+dim(Goal3ObjectiveCBaseMonth6)
+Goal3ObjectiveCBaseMonth6 = data.frame(Goal3ObjectiveCBaseMonth6[,7:15])
+head(Goal3ObjectiveCBaseMonth6)
+Goal3ObjectiveCBaseMonth6 = data.frame(apply(Goal3ObjectiveCBaseMonth6, 2, function(x){ifelse(x == "-7", 0, x)}))
+
+
+# You can just sum across with na.rm = TRUE and the NA will be treated as zeros so you don't have to get rid of them.
+Goal3ObjectiveCBaseMonth6 = data.frame(apply(Goal3ObjectiveCBaseMonth6, 2, function(x){ifelse(x == -99.0, 0, ifelse(x == -7, 0,x))}))
+summary(Goal3ObjectiveCBaseMonth6)
+write.csv(Goal3ObjectiveCBaseMonth6, "Goal3ObjectiveCBaseMonth6.csv", row.names = FALSE)
+Goal3ObjectiveCBaseMonth6  = read.csv("Goal3ObjectiveCBaseMonth6.csv", header = TRUE)
+summary(Goal3ObjectiveCBaseMonth6)
+### You need to change the Refused response to 0.  TimesCrime person 1 was Refused
+Goal3ObjectiveCBaseMonth6 = data.frame(apply(Goal3ObjectiveCBaseMonth6, 2, function(x){ifelse(x == -1, 0, x)}))
+head(Goal3ObjectiveCBaseMonth6)
+summary(Goal3ObjectiveCBaseMonth6)
+
+
+Goal3ObjectiveCBase = data.frame(Goal3ObjectiveCBaseMonth6$GPRAAll.InpatientAlcoholSANights.x, Goal3ObjectiveCBaseMonth6$GPRAAll.OutpatientAlcoholSATimes.x, Goal3ObjectiveCBaseMonth6$GPRAAll.ERAlcoholSATimes.x)
+summary(Goal3ObjectiveCBase)
+Goal3ObjectiveCBase
+Goal3ObjectiveCBase = data.frame(apply(Goal3ObjectiveCBase, 1, sum, na.rm = TRUE))
+colnames(Goal3ObjectiveCBase) = c("SABase")
+
+Goal3ObjectiveCMonth6= data.frame(Goal3ObjectiveCBaseMonth6$GPRAAll.InpatientAlcoholSANights.y, Goal3ObjectiveCBaseMonth6$GPRAAll.OutpatientAlcoholSATimes.y, Goal3ObjectiveCBaseMonth6$GPRAAll.ERAlcoholSATimes.y)
+write.csv(Goal3ObjectiveCMonth6, "Goal3ObjectiveCMonth6.csv", row.names = FALSE)
+Goal3ObjectiveCMonth6 = read.csv("Goal3ObjectiveCMonth6.csv", header = TRUE)
+Goal3ObjectiveCMonth6= data.frame(apply(Goal3ObjectiveCMonth6, 1, sum, na.rm = TRUE))
+colnames(Goal3ObjectiveCMonth6) = c("SAMonth6")
+
+Goal3ObjectiveCBaseMonth6 = data.frame(Goal3ObjectiveCMonth6, Goal3ObjectiveCBase)
+colnames(Goal3ObjectiveCBaseMonth6) = c("SAMonth6", "SABase")
+summary(Goal3ObjectiveCBaseMonth6)
+wilcox.test(Goal3ObjectiveCBaseMonth6$SAMonth6, Goal3ObjectiveCBaseMonth6$SABase, paired = TRUE, alternative = c("less"))
+## Can report the means, but they are statistically significantly different.
+Goal3ObjectiveCBaseMonth6 = data.frame(t(colMeans(Goal3ObjectiveCBaseMonth6)))
+
+Goal3ObjectiveCBaseMonth6$Difference = (Goal3ObjectiveCBaseMonth6$SAMonth6-Goal3ObjectiveCBaseMonth6$SABase)/ Goal3ObjectiveCBaseMonth6$SABase
+Goal3ObjectiveCBaseMonth6 = round(Goal3ObjectiveCBaseMonth6, 2)
+write.csv(Goal3ObjectiveCBaseMonth6, "Goal3ObjectiveCBaseMonth6.csv", row.names = FALSE)
+
+#### Goal 3 Objective D ######## ######## ################################################
+
+Goal3ObjectiveDBaseMonth6 = data.frame(ClientID = GPRAAll$ClientID, GPRAAll$InpatientMental.x, GPRAAll$InpatientMental.y, GPRAAll$OutpatientMental.x, GPRAAll$OutpatientMental.y, GPRAAll$ERMental.x, GPRAAll$ERMental.y)
+summary(Goal3ObjectiveDBaseMonth6)
+Goal3ObjectiveDBaseMonth6 = data.frame(na.omit(Goal3ObjectiveDBaseMonth6))
+
+Goal3ObjectiveDBaseMonth6Times = data.frame(ClientID = GPRAAll$ClientID,GPRAAll$InpatientMentalNights.x, GPRAAll$InpatientMentalNights.y, GPRAAll$OutpatientMentalTimes.x, GPRAAll$OutpatientMentalTimes.y, GPRAAll$ERMentalTimes.x, GPRAAll$ERMentalTimes.y)
+Goal3ObjectiveDBaseMonth6 = merge(Goal3ObjectiveDBaseMonth6 , Goal3ObjectiveDBaseMonth6Times , by = "ClientID", all.x = TRUE)
+
+Goal3ObjectiveDBaseMonth6 = data.frame(ClientID = GPRAAll$ClientID, GPRAAll$InpatientMental.x, GPRAAll$InpatientMental.y, GPRAAll$OutpatientMental.x, GPRAAll$OutpatientMental.y, GPRAAll$ERMental.x, GPRAAll$ERMental.y)
+summary(Goal3ObjectiveDBaseMonth6)
+Goal3ObjectiveDBaseMonth6 = data.frame(na.omit(Goal3ObjectiveDBaseMonth6))
+
+Goal3ObjectiveDBaseMonth6Times = data.frame(ClientID = GPRAAll$ClientID,GPRAAll$InpatientMentalNights.x, GPRAAll$InpatientMentalNights.y, GPRAAll$OutpatientMentalTimes.x, GPRAAll$OutpatientMentalTimes.y, GPRAAll$ERMentalTimes.x, GPRAAll$ERMentalTimes.y)
+Goal3ObjectiveDBaseMonth6 = merge(Goal3ObjectiveDBaseMonth6 , Goal3ObjectiveDBaseMonth6Times , by = "ClientID", all.x = TRUE)
+
+head(Goal3ObjectiveDBaseMonth6)
+summary(Goal3ObjectiveDBaseMonth6)
+dim(Goal3ObjectiveDBaseMonth6)
+head(Goal3ObjectiveDBaseMonth6)
+Goal3ObjectiveDBaseMonth6 = data.frame(Goal3ObjectiveDBaseMonth6[,8:13])
+head(Goal3ObjectiveDBaseMonth6)
+
+
+# You can just sum across with na.rm = TRUE and the NA will be treated as zeros so you don't have to get rid of them.
+Goal3ObjectiveDBaseMonth6 = data.frame(apply(Goal3ObjectiveDBaseMonth6, 2, function(x){ifelse(x == -99.0, 0, ifelse(x == -7, 0,x))}))
+summary(Goal3ObjectiveDBaseMonth6)
+write.csv(Goal3ObjectiveDBaseMonth6, "Goal3ObjectiveDBaseMonth6.csv", row.names = FALSE)
+Goal3ObjectiveDBaseMonth6  = read.csv("Goal3ObjectiveDBaseMonth6.csv", header = TRUE)
+summary(Goal3ObjectiveDBaseMonth6)
+### You need to change the Refused response to 0.  TimesCrime person 1 was Refused
+Goal3ObjectiveDBaseMonth6 = data.frame(apply(Goal3ObjectiveDBaseMonth6, 2, function(x){ifelse(x == -1, 0, x)}))
+head(Goal3ObjectiveDBaseMonth6)
+summary(Goal3ObjectiveDBaseMonth6)
+
+
+Goal3ObjectiveDBase = data.frame(Goal3ObjectiveDBaseMonth6$GPRAAll.InpatientMentalNights.x, Goal3ObjectiveDBaseMonth6$GPRAAll.OutpatientMentalTimes.x, Goal3ObjectiveDBaseMonth6$GPRAAll.ERMentalTimes.x)
+summary(Goal3ObjectiveDBase)
+Goal3ObjectiveDBase
+Goal3ObjectiveDBase = data.frame(apply(Goal3ObjectiveDBase, 1, sum, na.rm = TRUE))
+colnames(Goal3ObjectiveDBase) = c("SABase")
+
+Goal3ObjectiveDMonth6= data.frame(Goal3ObjectiveDBaseMonth6$GPRAAll.InpatientMentalNights.y, Goal3ObjectiveDBaseMonth6$GPRAAll.OutpatientMentalTimes.y, Goal3ObjectiveDBaseMonth6$GPRAAll.ERMentalTimes.y)
+write.csv(Goal3ObjectiveDMonth6, "Goal3ObjectiveDMonth6.csv", row.names = FALSE)
+Goal3ObjectiveDMonth6 = read.csv("Goal3ObjectiveDMonth6.csv", header = TRUE)
+Goal3ObjectiveDMonth6= data.frame(apply(Goal3ObjectiveDMonth6, 1, sum, na.rm = TRUE))
+colnames(Goal3ObjectiveDMonth6) = c("SAMonth6")
+
+Goal3ObjectiveDBaseMonth6 = data.frame(Goal3ObjectiveDMonth6, Goal3ObjectiveDBase)
+colnames(Goal3ObjectiveDBaseMonth6) = c("SAMonth6", "SABase")
+summary(Goal3ObjectiveDBaseMonth6)
+wilcox.test(Goal3ObjectiveDBaseMonth6$SAMonth6, Goal3ObjectiveDBaseMonth6$SABase, paired = TRUE, alternative = c("less"))
+Goal3ObjectiveDBaseMonth6 = data.frame(t(colMeans(Goal3ObjectiveDBaseMonth6)))
+
+Goal3ObjectiveDBaseMonth6$Difference = (Goal3ObjectiveDBaseMonth6$SAMonth6-Goal3ObjectiveDBaseMonth6$SABase)/ Goal3ObjectiveDBaseMonth6$SABase
+Goal3ObjectiveDBaseMonth6 = round(Goal3ObjectiveDBaseMonth6, 2)
+60/131 
+
+#### Goal 3 Objective E ####### ####### ####### ####### ####### ####### ####### ####### ####### ####### ####### ####### 
+# Need to sum the following variables: TANF, IWAP, Medicaid, LegalAid, SSI, TTA, FoodBanks, HUD, Area10, RecoveryWorks, SNAP, WIC
+Goal3ObjectiveEBaseMonth6 = data.frame(benefitsAll$TANF, benefitsAll$IWAP, benefitsAll$Medicaid, benefitsAll$LegalAid, 
+                                       benefitsAll$SSI, benefitsAll$TTA, benefitsAll$FoodBanks, benefitsAll$HUD, benefitsAll$Area10, benefitsAll$RecoveryWorks, 
+                                       benefitsAll$SNAP, benefitsAll$WIC, benefitsAll$RATANF, benefitsAll$RAIWAP, benefitsAll$RAMedicaid, benefitsAll$RALegalAid, 
+                                       benefitsAll$RASSI, benefitsAll$RATTA, benefitsAll$RAFoodBanks, benefitsAll$RAHUD, benefitsAll$RAArea10, benefitsAll$RARecoveryWorks, 
+                                       benefitsAll$RASNAP, benefitsAll$RAWIC)
+Goal3ObjectiveEBaseMonth6 = data.frame(na.omit(Goal3ObjectiveEBaseMonth6))
+
+head(Goal3ObjectiveEBaseMonth6)
+dim(Goal3ObjectiveEBaseMonth6)
+
+## There are negative numbers, so I need to get rid of those first
+Goal3ObjectiveEBaseMonth6 = subset(Goal3ObjectiveEBaseMonth6 >= 0)
+summary(Goal3ObjectiveEBaseMonth6)
+benefitsCon = data.frame(apply(Goal3ObjectiveEBaseMonth6, 1, sum, na.rm = TRUE))
+benefitsCon = apply(benefitsCon, 2, sum)
+benefitsCon
+#### Goal 4 Objective C ########### #############################################################################
+# Grab employed variable.  Then 1 and 2 are 1 for employed, 8, 9, and 10 are NA everything else is .
+ 
+Goal4ObjectiveC = data.frame(GPRAAll$EmployStatus.x, GPRAAll$EmployStatus.y)
+write.csv(Goal4ObjectiveC, "Goal4ObjectiveC.csv", row.names = FALSE)
+Goal4ObjectiveC = read.csv("Goal4ObjectiveC.csv", header = TRUE)
+Goal4ObjectiveC = data.frame(na.omit(Goal4ObjectiveC))
+dim(Goal4ObjectiveC)
+Goal4ObjectiveC = data.frame(apply(Goal4ObjectiveC , 2, function(x){ifelse(x == 1, 1, ifelse(x == 2, 1, ifelse(x == 8, NA, ifelse(x == 9, NA, ifelse(x == 10, NA, 0)))))}))
+Goal4ObjectiveC = data.frame(na.omit(Goal4ObjectiveC))
+dim(Goal4ObjectiveC)
+summary(Goal4ObjectiveC)
+Goal4ObjectiveC = data.frame(t(apply(Goal4ObjectiveC , 2, sum)))
+colnames(Goal4ObjectiveC)= c("Base", "Month6")
+Goal4ObjectiveC$Difference = (Goal4ObjectiveC$Month6-Goal4ObjectiveC$Base)/Goal4ObjectiveC$Base
+### Goal 4 Objective D ###### ###### ###### ###### ###### ###### ###### ###### ###### ###### ###### ###### ###### ###### 
+# Could create a composite score:  If you want to include OverallHealth it can be done, just is a little trickier
+# So adding to binary variables FamilySupport and SelfHelp where two means yes to both 1 means yes to one and zero means no to both
+# No variables like SatisfiedHealth, because there is not enough data
+Goal4ObjectiveD =  data.frame(GPRAAll$AttendVoluntary.x, GPRAAll$AttendVoluntary.y, GPRAAll$InteractFamilyFriends.x, GPRAAll$InteractFamilyFriends.y)
+Goal4ObjectiveD = data.frame(apply(Goal4ObjectiveD, 2, function(x){ifelse(x == 3, NA, ifelse(x == 4,NA, ifelse(x == 2, 0, ifelse(x == -99, NA, x))))}))
+Goal4ObjectiveD = data.frame(na.omit(Goal4ObjectiveD))
+dim(Goal4ObjectiveD)
+count(Goal4ObjectiveD)
+write.csv(Goal4ObjectiveD, "Goal4ObjectiveD.csv", row.names = FALSE)
+Goal4ObjectiveD = read.csv("Goal4ObjectiveD.csv", header = TRUE)
+count(Goal4ObjectiveD)
+
+Goal4ObjectiveDBase = data.frame(Goal4ObjectiveD[,1:2])
+Goal4ObjectiveDBase = data.frame(apply(Goal4ObjectiveDBase, 1, sum))
+colnames(Goal4ObjectiveDBase) = c("Base")
+head(Goal4ObjectiveDBase)
+
+Goal4ObjectiveDMonth6 = data.frame(Goal4ObjectiveD[,3:4])
+Goal4ObjectiveDMonth6 = data.frame(apply(Goal4ObjectiveDMonth6, 1, sum))
+colnames(Goal4ObjectiveDMonth6) = c("Month6")
+head(Goal4ObjectiveDMonth6)
+
+Goal4ObjectiveD = data.frame(Goal4ObjectiveDBase, Goal4ObjectiveDMonth6)
+head(Goal4ObjectiveD)
+wilcox.test(Goal4ObjectiveD$Month6, Goal4ObjectiveD$Base, paired = TRUE, alternative = c("greater"))
+
+Goal4ObjectiveD = data.frame(t(colMeans(Goal4ObjectiveD)))
+Goal4ObjectiveD$Difference = (Goal4ObjectiveD$Month6-Goal4ObjectiveD$Base)/ Goal4ObjectiveD$Base
+Goal4ObjectiveD = round(Goal4ObjectiveD, 2)
+write.csv(Goal4ObjectiveD, "Goal4ObjectiveD.csv", row.names = FALSE)
+
+
+##### Goal 5 Objective B ###### ##########################################
+### Just get demographcs from baseline: White, Black, Hispanic, Asian
+Goal5ObjectiveBEth = data.frame(GPRAAll$RaceWhite.x, GPRAAll$HispanicLatino.x, GPRAAll$RaceBlack.x, GPRAAll$RaceAsian.x, GPRAAll$RaceAmericanIndian.x)
+Goal5ObjectiveBEth = data.frame(apply(Goal5ObjectiveBEth, 2, function(x){ifelse(x == 2, 0, ifelse(x == -99, NA,ifelse(x == "<NA>", NA, x)))}))
+colnames(Goal5ObjectiveBEth) = c("White", "Hispanic", "Black", "Asian", "AmericanIndian")
+apply(Goal5ObjectiveBEth, 2, function(x) (describe.factor(x)))
+
+
+## Age ############
+age = data.frame(GPRAAll$BirthYear.x)
 write.csv(age, "age.csv", row.names = FALSE)
 age = read.csv("age.csv", header = TRUE)
-mean(age$YOB)
-
-#### Centerstone Metrics  ##### ############################################################
-#Objective H for substance and don't have anything else
-
-#### Project Specific outcomes #### #### #### #### #### #### #### #### #### #### #### ####
-#Goal3ObjectiveB = Substance Abuse Knowledge
-#Goal3ObjectiveH = Youth Communication Skills
-#Goal3ObjectiveK = Adult Empowerment
-#Goal3ObjectiveM = Reduce unprotected sex
-
-#### SPARS Metrics   ##### ############################################################
-
-## Creating new variable to subset later ########################
-gpraAdultBase$Date = as.Date(paste(gpraAdultBase$YEAR, gpraAdultBase$MONTH, gpraAdultBase$DAY, sep = "/"))
-gpraAdultBase$Date
-as.Date(gpraAdultBase$Date) 
-gpraYouthBase$Date = as.Date(paste(gpraYouthBase$YEAR, gpraYouthBase$MONTH, gpraYouthBase$DAY, sep = "/"))
-as.Date(gpraYouthBase$Date) 
-
-# Total People
-
-QPR1Youth = data.frame(na.omit(gpraYouthBase$Date))
-colnames(QPR1Youth) = c("Date")
-QPR1Youth$Date
-QPR1Adult = data.frame(na.omit(gpraAdultBase$Date))
-colnames(QPR1Adult) = c("Date")
-
-QPR1 = rbind(QPR1Adult, QPR1Youth)
-QPR1$Date
-write.csv(QPR1, "QPR1.csv")
-QPR1=QPR1[QPR1$Date >= "2018-4-1" & QPR1$Date <= "2018-6-30",]
-length(QPR1)
-
-#Adolescents (Age 12-17)
-QPR2 = data.frame(gpraYouthBase$Date)
-QPR2 = data.frame(na.omit(QPR2))
-colnames(QPR2) = c("Date")
-QPR2=QPR2[QPR2$Date >= "2018-4-1" & QPR2$Date <= "2018-6-30",]
-length(QPR2)
-
-##### Young Adults (Age 18-24) in college ##### ##### ##### ##### ##### ##### ##### 
-# 1 and 2 are yesses and 0 is no.  
-# Can get rid of na's, because I need both variables to identitfy them
-# Also need year of birth to subset
-QPR3 = data.frame(AGE = 2018-gpraAdultBase$YOB, gpraAdultBase$Date, gpraAdultBase$COLLEGE)
-QPR3 = data.frame(na.omit(QPR3))
-colnames(QPR3) = c("AGE", "Date", "College")
-head(QPR3)
-count(QPR3$College)
-# subset date first then do the subset for college then do age
-# Date for QPR
-
-QPR3 = subset(QPR3, AGE < 25)
-QPR3 = subset(QPR3, College == 1 | College == 2)
-QPR3
-QPR3=QPR3[QPR3["Date"] > "2018-4-1" & QPR3["Date"] <= "2018-6-30",]
-dim(QPR3)[1]
-
-######### Young Adults (Age 18-24) not in college ######### ######### ######### ######### 
-QPR4 = data.frame(AGE = 2018-gpraAdultBase$YOB, gpraAdultBase$Date, gpraAdultBase$COLLEGE)
-QPR4 = data.frame(na.omit(QPR4))
-colnames(QPR4) = c("AGE", "Date", "College")
-count(QPR4$College)
-# subset date first then do the subset for college then do age
-# Date for QPR
-QPR4=QPR4[QPR4$Date >= "2018-4-1" & QPR4$Date <= "2018-6-30",]
-QPR4 = subset(QPR4, AGE < 25)
-QPR4 = subset(QPR4, College == 0)
-dim(QPR4)[1]
-
-
-######### Older Adults (Age 50 and Over) ######### ######### ######### ######### ######### 
-QPR5 = data.frame(AGE = 2018-gpraAdultBase$YOB, gpraAdultBase$Date, gpraAdultBase$COLLEGE)
-QPR5 = data.frame(na.omit(QPR5))
-colnames(QPR5) = c("AGE", "Date", "College")
-count(QPR5$College)
-# subset date first then do the subset for college then do age
-# Date for QPR
-QPR5=QPR5[QPR5$Date >= "2018-4-1" & QPR5$Date <= "2018-6-30",]
-QPR5 = subset(QPR5, AGE >= 50)
-dim(QPR5)[1]
-
-#########  American Indian/Alaska Natives ######### ######### ######### ######### 
-QPR6 = data.frame(gpraAdultBase$Date, gpraAdultBase$R_AMERINALSK_N)
-QPR6 = data.frame(na.omit(QPR6))
-colnames(QPR6) = c("Date", "R_AMERINALSK_N")
-# subset date first then do the subset for college then do age
-# Date for QPR
-QPR6=QPR6[QPR6$Date >= "2018-4-1" & QPR6$Date <= "2018-6-30",]
-QPR6 = subset(QPR6, R_AMERINALSK_N == 1)
-dim(QPR6)[1]
-
-#########  Asian American/Pacific Islanders ######### ######### ######### ######### 
-# R_ASIAIN_N, R_CHINESE_N, R_FILIP_N, R_JAPAN_N, R_KOR_N, R_VIETNAM_N, R_OTHERASIA_N, R_HAW_N, R_GUAM_N, R_SAMO_N, R_OTHERPI_N
-
-QPR7 = data.frame(gpraAdultBase$Date, gpraAdultBase$R_ASIAIN_N, gpraAdultBase$R_CHINESE_N, gpraAdultBase$R_FILIP_N, gpraAdultBase$R_JAPAN_N, gpraAdultBase$R_KOR_N, gpraAdultBase$R_VIETNAM_N, gpraAdultBase$R_OTHERASIA_N, gpraAdultBase$R_HAW_N, gpraAdultBase$R_GUAM_N, gpraAdultBase$R_OTHERPI_N)
-QPR7 = data.frame(na.omit(QPR7))
-colnames(QPR7) = c("Date", "R_ASIAIN_N", "R_CHINESE_N", "R_FILIP_N", "R_JAPAN_N", "R_KOR_N", "R_VIETNAM_N", "R_OTHERASIA_N", "R_HAW_N", "R_GUAM_N", "R_OTHERPI_N")
-# subset date first then do the subset for college then do age
-# Date for QPR
-QPR7=QPR7[QPR7$Date >= "2018-4-1" & QPR7$Date <= "2018-6-30",]
-QPR7 = subset(QPR7, R_ASIAIN_N == 1 | R_CHINESE_N == 1 | R_FILIP_N ==1 | R_JAPAN_N == 1 | R_KOR_N== 1 | R_VIETNAM_N== 1 | R_OTHERASIA_N==1 | R_HAW_N==1 | R_GUAM_N==1 | R_OTHERPI_N==1)
-dim(QPR7)[1]
-
-
-#########   Black/African American Women #########  #########  
-QPR8 = data.frame(gpraAdultBase$Date, gpraAdultBase$R_BLACK_N, gpraAdultBase$GENDER)
-QPR8 = data.frame(na.omit(QPR8))
-colnames(QPR8) = c("Date", "R_BLACK_N", "GENDER")
-# subset date first then do the subset for college then do age
-# Date for QPR
-QPR8=QPR8[QPR8$Date >= "2018-4-1" & QPR8$Date <= "2018-6-30",]
-QPR8 = subset(QPR8, R_BLACK_N == 1 & GENDER == 0)
-dim(QPR8)[1]
-
-######### Black/African American Men #########   #########  #########   #########
-QPR9 = data.frame(gpraAdultBase$Date, gpraAdultBase$R_BLACK_N, gpraAdultBase$GENDER)
-QPR9 = data.frame(na.omit(QPR9))
-colnames(QPR9) = c("Date", "R_BLACK_N", "GENDER")
-# subset date first then do the subset for college then do age
-# Date for QPR
-QPR9=QPR9[QPR9$Date >= "2018-4-1" & QPR9$Date <= "2018-6-30",]
-QPR9 = subset(QPR9, R_BLACK_N == 1 & GENDER == 1)
-dim(QPR9)[1]
-
-######### Latina or Hispanic Women: #########   #########  #########   #########
-QPR10 = data.frame(gpraAdultBase$Date, gpraAdultBase$E_NONHISPAN, gpraAdultBase$GENDER)
-QPR10 = data.frame(na.omit(QPR10))
-colnames(QPR10) = c("Date", "E_NONHISPAN", "GENDER")
-# subset date first then do the subset for college then do age
-# Date for QPR
-QPR10=QPR10[QPR10$Date >= "2018-4-1" & QPR10$Date <= "2018-6-30",]
-QPR10 = subset(QPR10, E_NONHISPAN == 0 & GENDER == 0)
-dim(QPR10)[1]
-
-######### Latino or Hispanic Men: #########   #########  #########   #########
-QPR11 = data.frame(gpraAdultBase$Date, gpraAdultBase$E_NONHISPAN, gpraAdultBase$GENDER)
-QPR11 = data.frame(na.omit(QPR11))
-colnames(QPR11) = c("Date", "E_NONHISPAN", "GENDER")
-QPR11=QPR11[QPR11$Date >= "2018-4-1" & QPR11$Date <= "2018-6-30",]
-QPR11 = subset(QPR11, E_NONHISPAN == 0 & GENDER == 1)
-dim(QPR11)[1]
-
-#########  Men Having Sex with Men (MSM): #########   #########  #########   #########
-QPR12 = data.frame(gpraAdultBase$Date, gpraAdultBase$SEX_MALEEVER, gpraAdultBase$GENDER)
-QPR12 = data.frame(na.omit(QPR12))
-colnames(QPR12) = c("Date", "SEX_MALEEVER", "GENDER")
-QPR12=QPR12[QPR12$Date >= "2018-4-1" & QPR12$Date <= "2018-6-30",]
-QPR12 = subset(QPR12, SEX_MALEEVER == 1 & GENDER == 1)
-dim(QPR12)[1]
-
-## LGBTQ #########  #########  #########  #########  #########  
-QPR13 = data.frame(gpraAdultBase$Date, gpraAdultBase$SEX_PR)
-QPR13 = data.frame(na.omit(QPR13))
-colnames(QPR13) = c("Date", "SEX_PR")
-QPR13=QPR13[QPR13$Date >= "2018-4-1" & QPR13$Date <= "2018-6-30",]
-QPR13 = subset(QPR13, SEX_PR == 3 | SEX_PR == 4)
-dim(QPR13)[1]
-
-##  Military/Veterans  #########  #########  #########  #########  #########  
-# MILSERVENO
-QPR14 = data.frame(gpraAdultBase$Date, gpraAdultBase$MILSERVENO)
-QPR14 = data.frame(na.omit(QPR14))
-colnames(QPR14) = c("Date", "MILSERVENO")
-QPR14=QPR14[QPR14$Date >= "2018-4-1" & QPR14$Date <= "2018-6-30",]
-QPR14 = subset(QPR14, MILSERVENO == 0)
-dim(QPR14)[1]
-
-##  Reentry Populations  #########  #########  #########  #########  #########  
-## No data on this
-
-# HOMETYPE_N #########  #########  #########  #########  ######### 
-QPR16 = data.frame(gpraAdultBase$Date, gpraAdultBase$HOMETYPE_N)
-QPR16 = data.frame(na.omit(QPR16))
-colnames(QPR16) = c("Date", "HOMETYPE_N")
-QPR16=QPR16[QPR16$Date >= "2018-4-1" & QPR14$Date <= "2018-6-30",]
-QPR16 = subset(QPR16, HOMETYPE_N == 6)
-dim(QPR16)[1]
-
-
-## Sex Workers ##############  ############## ############## ##############
-# No data on this topic
-
-
-## Low Income ##############  ############## ############## ############## 
-#HINCOMEO_N
-
-QPR18 = data.frame(gpraAdultBase$Date, gpraAdultBase$HINCOMEO_N)
-QPR18 = data.frame(na.omit(QPR18))
-colnames(QPR18) = c("Date", "HINCOMEO_N")
-QPR18=QPR18[QPR18$Date >= "2018-4-1" & QPR14$Date <= "2018-6-30",]
-QPR18 = subset(QPR18, HINCOMEO_N == 1)
-dim(QPR18)[1]
-
-######## HIV Testing ##############  ############## ############## ##############
-
-#### Total Number of people ##################################
-QPR19 = data.frame(gpraAdultBase$Date, gpraAdultBase$INTERVENTION_B)
-QPR19 = data.frame(na.omit(QPR19))
-colnames(QPR19) = c("Date", "INTERVENTION_B")
-QPR19=QPR19[QPR19$Date >= "2018-4-1" & QPR19$Date <= "2018-6-30",]
-QPR19 = subset(QPR19, INTERVENTION_B == 78)
-dim(QPR19)[1]
-
-
-### In this reporting period, how many people received an HIV test for the first time using CSAP/MAI funds?
-
-# Need the intersection between those have been and those who have never been tested before
-# HIV_RESULTS_N
-QPR19 = data.frame(gpraAdultBase$Date, gpraAdultBase$INTERVENTION_B, gpraAdultBase$HIV_RESULTS_N)
-QPR19 = data.frame(na.omit(QPR19))
-colnames(QPR19) = c("Date", "INTERVENTION_B", "HIV_RESULTS_N")
-QPR19=QPR19[QPR19$Date >= "2018-4-1" & QPR19$Date <= "2018-6-30",]
-QPR19 = subset(QPR19, HIV_RESULTS_N == 0)
-dim(QPR19)[1]
-
-# Received an HIV test using CSAP/MAI grant funds during current reporting period
-### GENDER
-QPR19 = data.frame(gpraAdultBase$Date, gpraAdultBase$INTERVENTION_B, gpraAdultBase$GENDER)
-QPR19 = data.frame(na.omit(QPR19))
-colnames(QPR19) = c("Date", "INTERVENTION_B", "GENDER")
-QPR19=QPR19[QPR19$Date >= "2018-4-1" & QPR19$Date <= "2018-6-30",]
-QPR19 = subset(QPR19, INTERVENTION_B == 78)
-describe.factor(QPR19$GENDER)
-
-# Received an HIV test for the first time using CSAP/MAI grant funds during current reporting period
-### GENDER
-QPR19 = data.frame(gpraAdultBase$Date, gpraAdultBase$INTERVENTION_B, gpraAdultBase$HIV_RESULTS_N, gpraAdultBase$GENDER)
-QPR19 = data.frame(na.omit(QPR19))
-colnames(QPR19) = c("Date", "INTERVENTION_B", "HIV_RESULTS_N", "GENDER")
-QPR19=QPR19[QPR19$Date >= "2018-4-1" & QPR19$Date <= "2018-6-30",]
-QPR19 = subset(QPR19, HIV_RESULTS_N == 0)
-describe.factor(QPR19$GENDER)
-
-## Received an HIV test using CSAP/MAI grant funds during current reporting period
-## Ethnicity
-
-QPR19 = data.frame(gpraAdultBase$Date, gpraAdultBase$INTERVENTION_B, gpraAdultBase$E_NONHISPAN)
-QPR19 = data.frame(na.omit(QPR19))
-colnames(QPR19) = c("Date", "INTERVENTION_B", "E_NONHISPAN")
-QPR19=QPR19[QPR19$Date >= "2018-4-1" & QPR19$Date <= "2018-6-30",]
-QPR19 = subset(QPR19, INTERVENTION_B == 78)
-describe.factor(QPR19$E_NONHISPAN)
-
-## Received an HIV test for the first time using CSAP/MAI grant funds during current reporting period
-QPR19 = data.frame(gpraAdultBase$Date, gpraAdultBase$INTERVENTION_B, gpraAdultBase$HIV_RESULTS_N, gpraAdultBase$E_NONHISPAN)
-QPR19 = data.frame(na.omit(QPR19))
-colnames(QPR19) = c("Date", "INTERVENTION_B","HIV_RESULTS_N", "E_NONHISPAN")
-QPR19=QPR19[QPR19$Date >= "2018-4-1" & QPR19$Date <= "2018-6-30",]
-QPR19 = subset(QPR19, INTERVENTION_B == 78)
-QPR19 = subset(QPR19, HIV_RESULTS_N == 0)
-describe.factor(QPR19$E_NONHISPAN)
-
-## Received an HIV test using CSAP/MAI grant funds during current reporting period
-## Black
-QPR19 = data.frame(gpraAdultBase$Date, gpraAdultBase$INTERVENTION_B, gpraAdultBase$R_BLACK_N)
-QPR19 = data.frame(na.omit(QPR19))
-colnames(QPR19) = c("Date", "INTERVENTION_B", "R_BLACK_N")
-QPR19=QPR19[QPR19$Date >= "2018-4-1" & QPR19$Date <= "2018-6-30",]
-QPR19 = subset(QPR19, INTERVENTION_B == 78)
-describe.factor(QPR19$R_BLACK_N)
-
-## American Indian or Alaska Native
-QPR19 = data.frame(gpraAdultBase$Date, gpraAdultBase$INTERVENTION_B, gpraAdultBase$R_AMERINALSK_N)
-QPR19 = data.frame(na.omit(QPR19))
-colnames(QPR19) = c("Date", "INTERVENTION_B", "R_BLACK_N")
-QPR19=QPR19[QPR19$Date >= "2018-4-1" & QPR19$Date <= "2018-6-30",]
-QPR19 = subset(QPR19, INTERVENTION_B == 78)
-describe.factor(QPR19$R_AMERINALSK_N)
-
-## Asian
-QPR19 = data.frame(gpraAdultBase$Date, gpraAdultBase$INTERVENTION_B, gpraAdultBase$R_ASIAIN_N, gpraAdultBase$R_CHINESE_N, gpraAdultBase$R_FILIP_N, gpraAdultBase$R_JAPAN_N, gpraAdultBase$R_KOR_N, gpraAdultBase$R_VIETNAM_N, gpraAdultBase$R_OTHERASIA_N)
-QPR19 = data.frame(na.omit(QPR19))
-colnames(QPR19) = c("Date", "INTERVENTION_B", "R_ASIAIN_N", "R_CHINESE_N", "R_FILIP_N", "R_JAPAN_N", "R_KOR_N", "R_VIETNAM_N", "R_OTHERASIA_N")
-QPR19=QPR19[QPR19$Date >= "2018-4-1" & QPR19$Date <= "2018-6-30",]
-QPR19 = subset(QPR19, INTERVENTION_B == 78)
-# Can do x == 1, because 1's will only be in the Asian category
-QPR19 = data.frame(apply(QPR19, 2, function(x){ifelse(x == 1, 1, 0)}))
-QPR19 = data.frame(apply(QPR19, 1, sum))
-colnames(QPR19) = c("Asian")
-describe.factor(QPR19$Asian)
-
-## Native Hawaiian or Other Pacific Islander
-QPR19 = data.frame(gpraAdultBase$Date, gpraAdultBase$INTERVENTION_B, gpraAdultBase$R_HAW_N, gpraAdultBase$R_GUAM_N, gpraAdultBase$R_OTHERPI_N)
-QPR19 = data.frame(na.omit(QPR19))
-QPR19=QPR19[QPR19$Date >= "2018-4-1" & QPR19$Date <= "2018-6-30",]
-QPR19 = subset(QPR19, INTERVENTION_B == 78)
-# Can do x == 1, because 1's will only be in the Asian category
-QPR19 = data.frame(apply(QPR19, 2, function(x){ifelse(x == 1, 1, 0)}))
-QPR19 = data.frame(apply(QPR19, 1, sum))
-colnames(QPR19) = c("Asian")
-describe.factor(QPR19$Asian)
-
-## White
-
-QPR19 = data.frame(gpraAdultBase$Date, gpraAdultBase$INTERVENTION_B, gpraAdultBase$R_WHITE_N)
-QPR19 = data.frame(na.omit(QPR19))
-colnames(QPR19) = c("Date", "INTERVENTION_B", "R_WHITE_N")
-QPR19=QPR19[QPR19$Date >= "2018-4-1" & QPR19$Date <= "2018-6-30",]
-QPR19 = subset(QPR19, INTERVENTION_B == 78)
-describe.factor(QPR19$R_WHITE_N)
-
-# Multi just grab columns after deleting missing then sum.  Then if greater than 1 then are 1 if not 0.
-QPR19 = data.frame(Date = gpraAdultBase$Date, INTERVENTION_B =gpraAdultBase$INTERVENTION_B, gpraAdultBase[,c(17:20, 22:34)])
-head(QPR19)
-#QPR19 = data.frame(na.omit(QPR19))
-QPR19=QPR19[QPR19$Date >= "2018-4-1" & QPR19$Date <= "2018-6-30",]
-QPR19
-QPR19 = subset(QPR19, INTERVENTION_B == 78)
-QPR19$Date = NULL
-QPR19$INTERVENTION_B = NULL
-QPR19 = data.frame(apply(QPR19, 1, sum))
-colnames(QPR19) = c("Multi")
-describe.factor(QPR19$Multi)
-
-## Received an HIV test for the first time using CSAP/MAI grant funds during current reporting period
-## Black
-QPR19 = data.frame(gpraAdultBase$Date, gpraAdultBase$INTERVENTION_B, gpraAdultBase$R_BLACK_N, gpraAdultBase$HIV_RESULTS_N)
-QPR19 = data.frame(na.omit(QPR19))
-colnames(QPR19) = c("Date", "INTERVENTION_B", "R_BLACK_N", "HIV_RESULTS_N")
-QPR19=QPR19[QPR19$Date >= "2018-4-1" & QPR19$Date <= "2018-6-30",]
-QPR19 = subset(QPR19, INTERVENTION_B == 78)
-QPR19 = subset(QPR19, HIV_RESULTS_N == 0)
-describe.factor(QPR19$R_BLACK_N)
-
-## American Indian or Alaska Native
-QPR19 = data.frame(gpraAdultBase$Date, gpraAdultBase$INTERVENTION_B, gpraAdultBase$R_AMERINALSK_N, gpraAdultBase$HIV_RESULTS_N)
-QPR19 = data.frame(na.omit(QPR19))
-colnames(QPR19) = c("Date", "INTERVENTION_B", "R_BLACK_N", "HIV_RESULTS_N")
-QPR19=QPR19[QPR19$Date >= "2018-4-1" & QPR19$Date <= "2018-6-30",]
-QPR19 = subset(QPR19, INTERVENTION_B == 78)
-QPR19 = subset(QPR19, HIV_RESULTS_N == 0)
-describe.factor(QPR19$R_AMERINALSK_N)
-
-## Asian
-QPR19 = data.frame(gpraAdultBase$Date, gpraAdultBase$INTERVENTION_B, gpraAdultBase$R_ASIAIN_N, gpraAdultBase$R_CHINESE_N, gpraAdultBase$R_FILIP_N, gpraAdultBase$R_JAPAN_N, gpraAdultBase$R_KOR_N, gpraAdultBase$R_VIETNAM_N, gpraAdultBase$R_OTHERASIA_N, gpraAdultBase$HIV_RESULTS_N)
-QPR19 = data.frame(na.omit(QPR19))
-colnames(QPR19) = c("Date", "INTERVENTION_B", "R_ASIAIN_N", "R_CHINESE_N", "R_FILIP_N", "R_JAPAN_N", "R_KOR_N", "R_VIETNAM_N", "R_OTHERASIA_N", "HIV_RESULTS_N")
-QPR19=QPR19[QPR19$Date >= "2018-4-1" & QPR19$Date <= "2018-6-30",]
-QPR19 = subset(QPR19, INTERVENTION_B == 78)
-QPR19 = subset(QPR19, HIV_RESULTS_N == 0)
-QPR19 = data.frame(apply(QPR19, 2, function(x){ifelse(x == 1, 1, 0)}))
-QPR19 = data.frame(apply(QPR19, 1, sum))
-colnames(QPR19) = c("Asian")
-describe.factor(QPR19$Asian)
-
-## Native Hawaiian or Other Pacific Islander
-QPR19 = data.frame(gpraAdultBase$Date, gpraAdultBase$INTERVENTION_B, gpraAdultBase$R_HAW_N, gpraAdultBase$R_GUAM_N, gpraAdultBase$R_OTHERPI_N, gpraAdultBase$HIV_RESULTS_N)
-QPR19 = data.frame(na.omit(QPR19))
-QPR19=QPR19[QPR19$Date >= "2018-4-1" & QPR19$Date <= "2018-6-30",]
-QPR19 = subset(QPR19, INTERVENTION_B == 78)
-QPR19 = subset(QPR19, HIV_RESULTS_N == 0)
-QPR19 = data.frame(apply(QPR19, 2, function(x){ifelse(x == 1, 1, 0)}))
-QPR19 = data.frame(apply(QPR19, 1, sum))
-
-colnames(QPR19) = c("Asian")
-describe.factor(QPR19$Asian)
-
-## White
-
-QPR19 = data.frame(gpraAdultBase$Date, gpraAdultBase$INTERVENTION_B, gpraAdultBase$R_WHITE_N, gpraAdultBase$HIV_RESULTS_N)
-QPR19 = data.frame(na.omit(QPR19))
-colnames(QPR19) = c("Date", "INTERVENTION_B", "R_WHITE_N", "HIV_RESULTS_N")
-QPR19=QPR19[QPR19$Date >= "2018-4-1" & QPR19$Date <= "2018-6-30",]
-QPR19 = subset(QPR19, INTERVENTION_B == 78)
-QPR19 = subset(QPR19, HIV_RESULTS_N == 0)
-describe.factor(QPR19$R_WHITE_N)
-
-# Multi just grab columns after deleting missing then sum.  Then if greater than 1 then are 1 if not 0.
-QPR19 = data.frame(Date = gpraAdultBase$Date, INTERVENTION_B =gpraAdultBase$INTERVENTION_B, gpraAdultBase[,c(17:20, 22:34)])
-#QPR19 = data.frame(na.omit(QPR19))
-QPR19=QPR19[QPR19$Date >= "2018-4-1" & QPR19$Date <= "2018-6-30",]
-QPR19
-QPR19 = subset(QPR19, INTERVENTION_B == 78)
-QPR19 = subset(QPR19, HIV_RESULTS_N == 0)
-QPR19$Date = NULL
-QPR19$INTERVENTION_B = NULL
-QPR19 = data.frame(apply(QPR19, 1, sum))
-colnames(QPR19) = c("Multi")
-describe.factor(QPR19$Multi)
-
-
-## Received an HIV test using CSAP/MAI grant funds during current reporting period
-# Age ### For 12-17 it is 0.
-
-# 18 and older so everyone
-QPR19 = data.frame(gpraAdultBase$Date, gpraAdultBase$INTERVENTION_B)
-QPR19 = data.frame(na.omit(QPR19))
-colnames(QPR19) = c("Date", "INTERVENTION_B")
-QPR19=QPR19[QPR19$Date >= "2018-4-1" & QPR19$Date <= "2018-6-30",]
-QPR19 = subset(QPR19, INTERVENTION_B == 78)
-dim(QPR19)[1]
-
-# 18-24
-QPR19 = data.frame(gpraAdultBase$Date, gpraAdultBase$INTERVENTION_B, AGE = 2018-gpraAdultBase$YOB)
-QPR19 = data.frame(na.omit(QPR19))
-colnames(QPR19) = c("Date", "INTERVENTION_B", "AGE")
-QPR19=QPR19[QPR19$Date >= "2018-4-1" & QPR19$Date <= "2018-6-30",]
-QPR19 = subset(QPR19, INTERVENTION_B == 78)
-QPR19 = subset(QPR19, AGE >= 18 & AGE <= 24)
-dim(QPR19)[1]
-
-# 25-34
-QPR19 = data.frame(gpraAdultBase$Date, gpraAdultBase$INTERVENTION_B, AGE = 2018-gpraAdultBase$YOB)
-QPR19 = data.frame(na.omit(QPR19))
-colnames(QPR19) = c("Date", "INTERVENTION_B", "AGE")
-QPR19=QPR19[QPR19$Date >= "2018-4-1" & QPR19$Date <= "2018-6-30",]
-QPR19 = subset(QPR19, INTERVENTION_B == 78)
-QPR19 = subset(QPR19, AGE >= 25 & AGE <= 34)
-dim(QPR19)[1]
-
-# 35-44
-QPR19 = data.frame(gpraAdultBase$Date, gpraAdultBase$INTERVENTION_B, AGE = 2018-gpraAdultBase$YOB)
-QPR19 = data.frame(na.omit(QPR19))
-colnames(QPR19) = c("Date", "INTERVENTION_B", "AGE")
-QPR19=QPR19[QPR19$Date >= "2018-4-1" & QPR19$Date <= "2018-6-30",]
-QPR19 = subset(QPR19, INTERVENTION_B == 78)
-count(QPR19$AGE)
-
-# Rest are zero
-
-## Received an HIV test using CSAP/MAI grant funds during current reporting period
-# Age ### For 12-17 it is 0.
-
-# 18 and older so everyone
-QPR19 = data.frame(gpraAdultBase$Date, gpraAdultBase$INTERVENTION_B, gpraAdultBase$HIV_RESULTS_N)
-QPR19 = data.frame(na.omit(QPR19))
-colnames(QPR19) = c("Date", "INTERVENTION_B", "HIV_RESULTS_N")
-QPR19=QPR19[QPR19$Date >= "2018-4-1" & QPR19$Date <= "2018-6-30",]
-QPR19 = subset(QPR19, INTERVENTION_B == 78)
-QPR19 = subset(QPR19, HIV_RESULTS_N == 0)
-dim(QPR19)[1]
-
-# 18-24
-QPR19 = data.frame(gpraAdultBase$Date, gpraAdultBase$INTERVENTION_B, AGE = 2018-gpraAdultBase$YOB, gpraAdultBase$HIV_RESULTS_N)
-QPR19 = data.frame(na.omit(QPR19))
-colnames(QPR19) = c("Date", "INTERVENTION_B", "AGE", "HIV_RESULTS_N")
-QPR19=QPR19[QPR19$Date >= "2018-4-1" & QPR19$Date <= "2018-6-30",]
-QPR19 = subset(QPR19, INTERVENTION_B == 78)
-QPR19 = subset(QPR19, AGE >= 18 & AGE <= 24)
-QPR19 = subset(QPR19, HIV_RESULTS_N == 0)
-dim(QPR19)[1]
-
-# 25-34
-QPR19 = data.frame(gpraAdultBase$Date, gpraAdultBase$INTERVENTION_B, AGE = 2018-gpraAdultBase$YOB, gpraAdultBase$HIV_RESULTS_N)
-QPR19 = data.frame(na.omit(QPR19))
-colnames(QPR19) = c("Date", "INTERVENTION_B", "AGE", "HIV_RESULTS_N")
-QPR19=QPR19[QPR19$Date >= "2018-4-1" & QPR19$Date <= "2018-6-30",]
-QPR19 = subset(QPR19, INTERVENTION_B == 78)
-QPR19 = subset(QPR19, AGE >= 25 & AGE <= 34)
-QPR19 = subset(QPR19, HIV_RESULTS_N == 0)
-dim(QPR19)[1]
-
-# 35-44
-QPR19 = data.frame(gpraAdultBase$Date, gpraAdultBase$INTERVENTION_B, AGE = 2018-gpraAdultBase$YOB)
-QPR19 = data.frame(na.omit(QPR19))
-colnames(QPR19) = c("Date", "INTERVENTION_B", "AGE")
-QPR19=QPR19[QPR19$Date >= "2018-4-1" & QPR19$Date <= "2018-6-30",]
-QPR19 = subset(QPR19, INTERVENTION_B == 78)
-QPR19 = subset(QPR19, HIV_RESULTS_N == 0)
-count(QPR19$AGE)
-
-# Rest are zero
-# How many were homeless or unstably housed?
-# 0
-
-## How many were tested directly by the grantee organization or partner organization?
-QPR19 = data.frame(gpraAdultBase$Date, gpraAdultBase$INTERVENTION_B, gpraAdultBase$HIV_RESULTS_N)
-QPR19 = data.frame(na.omit(QPR19))
-colnames(QPR19) = c("Date", "INTERVENTION_B", "HIV_RESULTS_N")
-QPR19=QPR19[QPR19$Date >= "2018-4-1" & QPR19$Date <= "2018-6-30",]
-QPR19 = subset(QPR19, INTERVENTION_B == 78)
-QPR19 = subset(QPR19, HIV_RESULTS_N == 0)
-dim(QPR19)[1]
-
-## How many tested positive for HIV?
-# 0
-
-## How many were informed of their HIV status? 
-QPR19 = data.frame(gpraAdultBase$Date, gpraAdultBase$INTERVENTION_B, gpraAdultBase$HIV_RESULTS_N)
-QPR19 = data.frame(na.omit(QPR19))
-colnames(QPR19) = c("Date", "INTERVENTION_B", "HIV_RESULTS_N")
-QPR19=QPR19[QPR19$Date >= "2018-4-1" & QPR19$Date <= "2018-6-30",]
-QPR19 = subset(QPR19, INTERVENTION_B == 78)
-QPR19 = subset(QPR19, HIV_RESULTS_N == 0)
-dim(QPR19)[1]
-
-## Of those who tested positive for HIV, how many were referred to treatment?
-# 0
-
-
+age = na.omit(age)
+age
+mean(age$GPRAAll.BirthYear.x)
+age = 2018-(mean(age$GPRAAll.BirthYear.x)); age
+
+## Now get military status #### ####################################################################
+#ServedMilitary, ActiveDuty, Deployed, FamilyDuty
+Goal5ObjectiveBMil = data.frame(GPRAAll$ServedMilitary.x, GPRAAll$ActiveDuty.x, GPRAAll$Deployed.x, GPRAAll$FamilyDuty.x)
+library(plyr)
+# Count 2's and 3's
+Goal5ObjectiveBMil = count(GPRAAll$ServedMilitary.x)
+Goal5ObjectiveBMil = subset(Goal5ObjectiveBMil, x ==2 | x ==3)
+Goal5ObjectiveBMil = data.frame(apply(Goal5ObjectiveBMil, 2, sum))
+colnames(Goal5ObjectiveBMil) = c("Total")
+Goal5ObjectiveBMil = Goal5ObjectiveBMil[2,]
+Goal5ObjectiveBMil 
+
+
+#### Project Objectives ######## ########################################################################
+# 1 grab the number of people in the program
+# 2 Goal3ObjectiveA = Project Objective 2
+#Goal3ObjectiveB = Project Objective 3
+#Goal3ObjectiveC = Project Objective 5
+#Goal2ObjectiveD = Project Objective 6
+
+#### Demographics ######### ######### ######### ######### ######### ######### ######### ######### ######### 
+
+#Ethnicity = Goal 5 Objective B
+
+gender = data.frame(GPRAAll$Gender.x)
+describe.factor(gender)
+
+# Education
+edu = data.frame(GPRAAll$EducationYears.x)
+# 0-11 is less than high school; 12 is high school; 13-15 is some college; 16 is bachelorr or higher, 17 and 18 ar vocal
+#Less than high school = 1; 2 = High School; 3 = Some College, 4 = College Degree or higher; 5  = Vocational 
+edu = data.frame(apply(edu, 2, function(x){ifelse(x < 12, 1, ifelse(x == 12, 2, ifelse(x == 13, 3, ifelse(x == 14, 3, ifelse(x == 15, 3, ifelse(x == 16, 4, ifelse(x == 17, 5, ifelse(x == 18, 5,x))))))))}))
+describe.factor(edu)
+
+######################### Centerstone Metrics ################### ############################################################################
+# Goal3 Objective A for Substance Abuse
+#Goal3ObjectiveB = Project Objective 3 for Depression
+# ER Useage 
+Goal3ObjectiveDBaseMonth6 = data.frame(ParticipantID = GPRAAll$ClientID, GPRAAll$ERMental.x, GPRAAll$ERMental.y, GPRAAll$ERAlcoholSA.x, GPRAAll$ERAlcoholSA.y)
+summary(Goal3ObjectiveDBaseMonth6)
+Goal3ObjectiveDBaseMonth6 = na.omit(Goal3ObjectiveDBaseMonth6)
+dim(Goal3ObjectiveDBaseMonth6)
+Goal3ObjectiveDBaseMonth6Times = data.frame(ParticipantID = GPRAAll$ClientID, GPRAAll$ERMentalTimes.x, GPRAAll$ERMentalTimes.y, GPRAAll$ERAlcoholSATimes.x, GPRAAll$ERAlcoholSATimes.y)
+Goal3ObjectiveDBaseMonth6 = merge(Goal3ObjectiveDBaseMonth6 , Goal3ObjectiveDBaseMonth6Times , by = "ParticipantID", all.x = TRUE)
+head(Goal3ObjectiveDBaseMonth6)
+summary(Goal3ObjectiveDBaseMonth6)
+dim(Goal3ObjectiveDBaseMonth6)
+Goal3ObjectiveDBaseMonth6 = data.frame(Goal3ObjectiveDBaseMonth6[,6:9])
+# You can just sum across with na.rm = TRUE and the NA will be treated as zeros so you don't have to get rid of them.
+Goal3ObjectiveDBaseMonth6 = data.frame(apply(Goal3ObjectiveDBaseMonth6, 2, function(x){ifelse(x == -99.0, 0,x)}))
+summary(Goal3ObjectiveDBaseMonth6)
+write.csv(Goal3ObjectiveDBaseMonth6, "Goal3ObjectiveDBaseMonth6.csv", row.names = FALSE)
+Goal3ObjectiveDBaseMonth6  = read.csv("Goal3ObjectiveDBaseMonth6.csv", header = TRUE)
+summary(Goal3ObjectiveDBaseMonth6)
+### You need to change the Refused response to 0.
+Goal3ObjectiveDBase = data.frame(Goal3ObjectiveDBaseMonth6$GPRAAll.ERMentalTimes.x, Goal3ObjectiveDBaseMonth6$GPRAAll.ERAlcoholSATimes.x)
+Goal3ObjectiveDBase = data.frame(apply(Goal3ObjectiveDBase, 1, sum, na.rm = TRUE))
+colnames(Goal3ObjectiveDBase) = c("SABase")
+
+Goal3ObjectiveDMonth6= data.frame(Goal3ObjectiveDBaseMonth6$GPRAAll.ERMentalTimes.y, Goal3ObjectiveDBaseMonth6$GPRAAll.ERAlcoholSATimes.y)
+write.csv(Goal3ObjectiveDMonth6, "Goal3ObjectiveDMonth6.csv", row.names = FALSE)
+Goal3ObjectiveDMonth6 = read.csv("Goal3ObjectiveDMonth6.csv", header = TRUE)
+Goal3ObjectiveDMonth6= data.frame(apply(Goal3ObjectiveDMonth6, 1, sum, na.rm = TRUE))
+colnames(Goal3ObjectiveDMonth6) = c("SAMonth6")
+
+Goal3ObjectiveDBaseMonth6 = data.frame(Goal3ObjectiveDMonth6, Goal3ObjectiveDBase)
+colnames(Goal3ObjectiveDBaseMonth6) = c("SAMonth6", "SABase")
+summary(Goal3ObjectiveDBaseMonth6)
+dim(Goal3ObjectiveDBaseMonth6)
+
+Goal3ObjectiveDBaseMonth6 = data.frame(t(colMeans(Goal3ObjectiveDBaseMonth6)))
+
+Goal3ObjectiveDBaseMonth6$Difference = (Goal3ObjectiveDBaseMonth6$SAMonth6-Goal3ObjectiveDBaseMonth6$SABase)/ Goal3ObjectiveDBaseMonth6$SABase
+Goal3ObjectiveDBaseMonth6 = round(Goal3ObjectiveDBaseMonth6, 2); Goal3ObjectiveDBaseMonth6
+
+###### Project Specific Outcomes ###### ###### ###### ###### ###### ###### ###### ###### ###### ###### ###### 
+# Goal 4 Objective C Increase employment readiness
+# Goal 4 Objective D Increase particpant independent living skills
+# Goal 3 Objective E increase benefits enrollment
+# Using housing rate data when you get it
+
+156*.79
