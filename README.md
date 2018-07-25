@@ -1008,5 +1008,17 @@ dim(QPR19)[1]
 
 ## Of those who tested positive for HIV, how many were referred to treatment?
 # 0
+setwd("S:/Indiana Research & Evaluation/CCPE/CCPE SPSS - Datasets/DosageDocs")
+### Centerstone average sessions per client use dosage forms
+### Grab the duration for each take the means for each one then sum.  This will give you the average duration for the four types of things provided 
+DosageI = read.csv("HIV Individual Dosage Upload Template - Updated 20171116.csv", header = TRUE)
+
+# No data
+#DosageG = read.csv("HIV Group Dosage Upload Template - Updated 20171116.csv", header = TRUE)
+DosageI = DosageI[c("DURATION1", "DURATION2", "DURATION3", "DURATION4")]
+DosageI = data.frame(apply(DosageI, 2, mean, na.rm = TRUE))
+DosageI = apply(DosageI, 2, mean)
+DosageI
+
 
 
