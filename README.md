@@ -997,7 +997,7 @@ dim(QPR19)[1]
 ## How many tested positive for HIV?
 # 0
 
-## How many were informed of their HIV status? 
+## How many were iformed of their HIV status? 
 QPR19 = data.frame(gpraAdultBase$Date, gpraAdultBase$INTERVENTION_B, gpraAdultBase$HIV_RESULTS_N)
 QPR19 = data.frame(na.omit(QPR19))
 colnames(QPR19) = c("Date", "INTERVENTION_B", "HIV_RESULTS_N")
