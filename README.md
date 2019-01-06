@@ -7,88 +7,11 @@
 ###### Objective E and F Number of people served by each intervention Overall
 # First grab total number of people served use the participant ID include the youth then for each intervention.  Grab the length for both adult and youth from all the data which will give you all the people who have data entered.  
 
-## Total numbers for year one
-# Get totals by reading in excel sheet from tracking 
-PartNum = read.csv("PartNum.csv", header = TRUE)
-
-PartNum$Baseline.Date = as.Date(PartNum$Baseline.Date, format = "%m/%d/%Y")
-dim(PartNum)
-
-Year1 = subset(PartNum, Baseline.Date < "2016-10-01")
-dim(Year1)
-
-Year2 = subset(PartNum, Baseline.Date >= "2016-10-01" & Baseline.Date <= "2017-9-30")
-Year2
-dim(Year2)
-
-
-Year3 = subset(PartNum, Baseline.Date > "2017-9-30" & Baseline.Date < "2018-10-01")
-dim(Year3)
-
-
-
-# Now SIS
-InternAdult = data.frame(gpraAdultAll$INTERVENTION_A.x, gpraAdultAll$INTERVENTION_B.x, gpraAdultAll$INTERVENTION_C.x)
-SISAdult = data.frame(subset(InternAdult, gpraAdultAll.INTERVENTION_A.x ==2 | gpraAdultAll.INTERVENTION_B.x == 2 | gpraAdultAll.INTERVENTION_C.x == 2))
-SISAdult = dim(SISAdult)
-SISAdult = SISAdult[1]
-
-InternYouth = data.frame(gpraYouthAll$INTERVENTION_A.x, gpraYouthAll$INTERVENTION_B.x, gpraYouthAll$INTERVENTION_C.x)
-SISYouth = data.frame(subset(InternYouth, gpraYouthAll.INTERVENTION_A.x == 2 | gpraYouthAll.INTERVENTION_B.x == 2 | gpraYouthAll.INTERVENTION_C.x == 2))
-SISYouth = dim(SISYouth)
-SISYouth = SISYouth[1]
-
-totalSIS = sum(SISAdult, SISYouth); totalSIS
-
-# Now CTR and no CTR for youth
-InternAdult = data.frame(gpraAdultAll$INTERVENTION_A.x, gpraAdultAll$INTERVENTION_B.x, gpraAdultAll$INTERVENTION_C.x)
-CTRAdult = data.frame(subset(InternAdult, gpraAdultAll.INTERVENTION_A.x ==1 | gpraAdultAll.INTERVENTION_B.x == 1 | gpraAdultAll.INTERVENTION_C.x == 1))
-CTRAdult = dim(CTRAdult)
-CTRAdult = CTRAdult[1]
-totalCTR = CTRAdult 
-
-
-# Lead and Seed 
-InternAdult = data.frame(gpraAdultAll$INTERVENTION_A.x, gpraAdultAll$INTERVENTION_B.x, gpraAdultAll$INTERVENTION_C.x)
-LSAdult = data.frame(subset(InternAdult, gpraAdultAll.INTERVENTION_A.x ==3 | gpraAdultAll.INTERVENTION_B.x == 3 | gpraAdultAll.INTERVENTION_C.x == 3))
-LSAdult = dim(LSAdult)
-LSAdult = LSAdult[1]
-
-InternYouth = data.frame(gpraYouthAll$INTERVENTION_A.x, gpraYouthAll$INTERVENTION_B.x, gpraYouthAll$INTERVENTION_C.x)
-LSYouth = data.frame(subset(InternYouth, gpraYouthAll.INTERVENTION_A.x ==1 | gpraYouthAll.INTERVENTION_B.x == 1 | gpraYouthAll.INTERVENTION_C.x == 1))
-LSYouth = dim(LSYouth)
-LSYouth = LSYouth[1]
-totalLS = LSYouth
-
-# Respect need it for adult and youth
-InternAdult = data.frame(gpraAdultAll$INTERVENTION_A.x, gpraAdultAll$INTERVENTION_B.x, gpraAdultAll$INTERVENTION_C.x)
-RespectAdult = data.frame(subset(InternAdult, gpraAdultAll.INTERVENTION_A.x ==51 | gpraAdultAll.INTERVENTION_B.x == 51 | gpraAdultAll.INTERVENTION_C.x == 51))
-RespectAdult = dim(RespectAdult)
-RespectAdult = RespectAdult[1]
-
-InternYouth = data.frame(gpraYouthAll$INTERVENTION_A.x, gpraYouthAll$INTERVENTION_B.x, gpraYouthAll$INTERVENTION_C.x)
-RespectYouth = data.frame(subset(InternYouth, gpraYouthAll.INTERVENTION_A.x ==51 | gpraYouthAll.INTERVENTION_B.x == 51 | gpraYouthAll.INTERVENTION_C.x == 51))
-RespectYouth = dim(RespectYouth)
-RespectYouth = RespectYouth[1]
-
-totalRespect = data.frame(sum(RespectAdult, RespectYouth))
-colnames(totalRespect) = c("totalRespect")
-
-
-## Create a nice table for the data
-Goal1ObjectiveE= data.frame(totalCCPE, totalAdults , totalYouth, SISAdult, SISYouth, totalSIS, totalCTR, LSAdult, LSYouth, totalLS, RespectAdult, RespectYouth, totalRespect)
-setwd("C:/Users/Matthew.Hanauer/Desktop")
-write.csv(Goal1ObjectiveE, "Goal1ObjectiveE.csv", row.names = FALSE)
-
-totalTesting = 489+totalCTR; totalTesting
-
-##### Goal 1 Objective G #############  ############# ############# ############# ############# #############
-### 2016 Testing 
 
 
 ################## Goal 3 Objective A #############################################################
 # Grabbing the KNOW_SA variable, because other variables are being used.  Only 17 particpants from pocket which would be better.
-Goal3ObjectiveA =  data.frame(gpraAdultAll$KNOW_SA.x, gpraAdultAll$KNOW_SA.y, gpraAdultAll$KNOW_SA)
+Goal3ObjectiveA =  data.frame(gpraAdultAll$KNOW_SA.x, gpraAdultAll$KNOW_SA.y)
 
 Goal3ObjectiveABaseMonth3 = data.frame(Goal3ObjectiveA$gpraAdultAll.KNOW_SA.x, Goal3ObjectiveA$gpraAdultAll.KNOW_SA.y)
 Goal3ObjectiveABaseMonth3 = data.frame(apply(Goal3ObjectiveABaseMonth3, 2, function(x){ifelse(x == 98, NA, x)}))
@@ -106,12 +29,11 @@ Goal3ObjectiveABaseMonth3 = data.frame(t(colMeans(Goal3ObjectiveABaseMonth3)))
 colnames(Goal3ObjectiveABaseMonth3) = c("Base", "Month3")
 Goal3ObjectiveABaseMonth3$Difference = (Goal3ObjectiveABaseMonth3$Month3-Goal3ObjectiveABaseMonth3$Base)/Goal3ObjectiveABaseMonth3$Base
 Goal3ObjectiveABaseMonth3 = round(Goal3ObjectiveABaseMonth3,2)
-write.csv(Goal3ObjectiveABaseMonth3 , "Goal3ObjectiveABaseMonth3.csv", row.names = FALSE)
 
 
 ########## Goal 3 Objective B | Increase knowledge about HIV and VH by 20%.  KNOW_HIV #########################################################
 
-Goal3ObjectiveB =  data.frame(gpraAdultAll$KNOW_HIV.x, gpraAdultAll$KNOW_HIV.y, gpraAdultAll$KNOW_HIV)
+Goal3ObjectiveB =  data.frame(gpraAdultAll$KNOW_HIV.x, gpraAdultAll$KNOW_HIV.y)
 
 Goal3ObjectiveB = data.frame(apply(Goal3ObjectiveB, 2, function(x){ifelse(x == 98, NA, ifelse(x == 2, NA, x))}))
 summary(Goal3ObjectiveB)
@@ -132,12 +54,11 @@ Goal3ObjectiveBBaseMonth3 = data.frame(t(colMeans(Goal3ObjectiveBBaseMonth3)))
 colnames(Goal3ObjectiveBBaseMonth3) = c("Base", "Month3")
 Goal3ObjectiveBBaseMonth3$Difference = (Goal3ObjectiveBBaseMonth3$Month3-Goal3ObjectiveBBaseMonth3$Base)/Goal3ObjectiveBBaseMonth3$Base
 Goal3ObjectiveBBaseMonth3 = round(Goal3ObjectiveBBaseMonth3, 2)
-write.csv(Goal3ObjectiveBBaseMonth3, "Goal3ObjectiveBBaseMonth3.csv", row.names = FALSE)
 
 
 
 ##### Goal 3 Objective C RSKCIG, RSKMJ, RSKALC create a total compoiste scores ##### ##### ##### ##### ##### ##### ##### ##### ##### ##### #####  
-Goal3ObjectiveC = data.frame(gpraAdultAll$RSKCIG.x, gpraAdultAll$RSKCIG.y, gpraAdultAll$RSKCIG, gpraAdultAll$RSKMJ.x, gpraAdultAll$RSKMJ.y, gpraAdultAll$RSKMJ, gpraAdultAll$RSKALC.x, gpraAdultAll$RSKALC.y, gpraAdultAll$RSKALC)
+Goal3ObjectiveC = data.frame(gpraAdultAll$RSKCIG.x, gpraAdultAll$RSKCIG.y, gpraAdultAll$RSKMJ.x, gpraAdultAll$RSKMJ.y, gpraAdultAll$RSKALC.x, gpraAdultAll$RSKALC.y)
 head(Goal3ObjectiveC)
 Goal3ObjectiveC  = data.frame(apply(Goal3ObjectiveC, 2, function(x){ifelse(x == 98, NA, ifelse(x == 97, NA, x))}))
 head(Goal3ObjectiveC)
@@ -174,12 +95,11 @@ Goal3ObjectiveCBaseMonth3 = data.frame(t(colMeans(Goal3ObjectiveCBaseMonth3)))
 colnames(Goal3ObjectiveCBaseMonth3) = c("Base", "Month3")
 Goal3ObjectiveCBaseMonth3$Difference = (Goal3ObjectiveCBaseMonth3$Month3-Goal3ObjectiveCBaseMonth3$Base)/Goal3ObjectiveCBaseMonth3$Base
 Goal3ObjectiveCBaseMonth3 = round(Goal3ObjectiveCBaseMonth3, 2)
-write.csv(Goal3ObjectiveCBaseMonth3, "Goal3ObjectiveCBaseMonth3.csv", row.names = FALSE)
 
 
 ####### Goal 3 Objective D ######### ###################################################################################################
 # Grab these variables and change RSKANYSEX_UNP, RSKSEX_ALCDRG, RSKNDL_SHR change ObjectiveC to ObjectiveD, change SAHarm to HIVHarm 
-Goal3ObjectiveD= data.frame(gpraAdultAll$RSKANYSEX_UNP.x, gpraAdultAll$RSKANYSEX_UNP.y, gpraAdultAll$RSKANYSEX_UNP, gpraAdultAll$RSKSEX_ALCDRG.x, gpraAdultAll$RSKSEX_ALCDRG.y, gpraAdultAll$RSKSEX_ALCDRG, gpraAdultAll$RSKNDL_SHR.x, gpraAdultAll$RSKNDL_SHR.y, gpraAdultAll$RSKNDL_SHR)
+Goal3ObjectiveD= data.frame(gpraAdultAll$RSKANYSEX_UNP.x, gpraAdultAll$RSKANYSEX_UNP.y, gpraAdultAll$RSKSEX_ALCDRG.x, gpraAdultAll$RSKSEX_ALCDRG.y, gpraAdultAll$RSKNDL_SHR.x, gpraAdultAll$RSKNDL_SHR.y)
 head(Goal3ObjectiveD)
 Goal3ObjectiveD = data.frame(apply(Goal3ObjectiveD, 2, function(x){ifelse(x == 98, NA, ifelse(x == 97, NA, x))}))
 head(Goal3ObjectiveD)
@@ -213,54 +133,9 @@ Goal3ObjectiveDBaseMonth3 = data.frame(t(colMeans(Goal3ObjectiveDBaseMonth3)))
 colnames(Goal3ObjectiveDBaseMonth3) = c("Base", "Month3")
 Goal3ObjectiveDBaseMonth3$Difference = (Goal3ObjectiveDBaseMonth3$Month3-Goal3ObjectiveDBaseMonth3$Base)/Goal3ObjectiveDBaseMonth3$Base
 Goal3ObjectiveDBaseMonth3 = round(Goal3ObjectiveDBaseMonth3, 2)
-write.csv(Goal3ObjectiveDBaseMonth3, "Goal3ObjectiveDBaseMonth3.csv", row.names = FALSE)
 
 
 
-###### Goal 3 Objective E ###################### ##############################################################################################################
-Goal3ObjectiveEFP = data.frame(Year = gpraAdultAll$YEAR.x, YOB = 2018-gpraAdultAll$YOB.x,gpraAdultAll$INTERVENTION_A.x, gpraAdultAll$INTERVENTION_B.x, gpraAdultAll$INTERVENTION_C.x)
-Goal3ObjectiveEFP = data.frame(subset(Goal3ObjectiveEFP, gpraAdultAll.INTERVENTION_A.x ==78 | gpraAdultAll.INTERVENTION_B.x == 78 | gpraAdultAll.INTERVENTION_C.x == 78))
-head(Goal3ObjectiveEFP)
-### 2016 First then 2017 and get percentage change.
-Goal3ObjectiveEFP2016 = subset(Goal3ObjectiveEFP, YOB < 25 & Year == 2016)
-Goal3ObjectiveEFP2016= data.frame(Goal3ObjectiveEFP2016 )
-Goal3ObjectiveEFP2016=dim(Goal3ObjectiveEFP2016 )
-Goal3ObjectiveEFP2016= data.frame(Goal3ObjectiveEFP2016[1]) 
-colnames(Goal3ObjectiveEFP2016) = c("TestedFocusPopulation2016") 
-
-### 2017
-Goal3ObjectiveEFP2017= subset(Goal3ObjectiveEFP, YOB < 25 & Year == 2017)
-Goal3ObjectiveEFP2017= data.frame(Goal3ObjectiveEFP2017)
-Goal3ObjectiveEFP2017=dim(Goal3ObjectiveEFP2017)
-Goal3ObjectiveEFP2017= data.frame(Goal3ObjectiveEFP2017 [1]) 
-colnames(Goal3ObjectiveEFP2017) = c("TestedFocusPopulation2017")
-
-Goal3ObjectiveE = data.frame(Goal3ObjectiveEFP2017, Goal3ObjectiveEFP2016)
-head(Goal3ObjectiveE)
-Goal3ObjectiveE$Difference = (Goal3ObjectiveE$TestedFocusPopulation2017- Goal3ObjectiveE$TestedFocusPopulation2016)/ Goal3ObjectiveE$TestedFocusPopulation2016
-Goal3ObjectiveE = round(Goal3ObjectiveE,2)
-
-write.csv(Goal3ObjectiveE, "Goal3ObjectiveE.csv", row.names = FALSE)
-
-###### Goal 3 Objective G ############################################################################################ #########
-# Need to change the to just 2017 so need the year variable
-Goal3ObjectiveG = data.frame(YEAR.x = gpraAdultAll$YEAR.x,gpraAdultAll$INTERVENTION_A.x, gpraAdultAll$INTERVENTION_B.x, gpraAdultAll$INTERVENTION_C.x)
-Goal3ObjectiveG  = data.frame(subset(Goal3ObjectiveG , gpraAdultAll.INTERVENTION_A.x ==78 | gpraAdultAll.INTERVENTION_B.x == 78 | gpraAdultAll.INTERVENTION_C.x == 78))
-Goal3ObjectiveG  = data.frame(Goal3ObjectiveG)
-head(Goal3ObjectiveG)
-
-Goal3ObjectiveG2016  = data.frame(subset(Goal3ObjectiveG, YEAR.x == 2016))
-Goal3ObjectiveG2016  =dim(Goal3ObjectiveG2016)
-Goal3ObjectiveG2016  = Goal3ObjectiveG2016[1]
-
-Goal3ObjectiveG2017  = data.frame(subset(Goal3ObjectiveG, YEAR.x == 2017))
-Goal3ObjectiveG2017  =dim(Goal3ObjectiveG2017)
-Goal3ObjectiveG2017  = Goal3ObjectiveG2017[1]
-
-Goal3ObjectiveGIncrease = round(data.frame(Goal3ObjectiveGIncrease =(Goal3ObjectiveG2017-Goal3ObjectiveG2016)/ Goal3ObjectiveG2016),2)    
-Goal3ObjectiveG = data.frame(Goal3ObjectiveG2016  , Goal3ObjectiveG2017, Goal3ObjectiveGIncrease)
-colnames(Goal3ObjectiveG) = c("HIV Tested 2016", "HIV Tested 2017", "HIV Tested Increase") 
-write.csv(Goal3ObjectiveG, "Goal3ObjectiveG .csv", row.names = FALSE)
 
 
 ###### Goal 3 Objective H ############################################################################################ #########
@@ -289,11 +164,11 @@ head(Goal3ObjectiveH3month)
 wilcox.test(Goal3ObjectiveH3month$Goal3ObjectiveH3month, Goal3ObjectiveHBase$Goal3ObjectiveHBase, paired = TRUE, alternative = c("less"))
 
 Goal3ObjectiveHBaseMonth3 = data.frame(Goal3ObjectiveHBase, Goal3ObjectiveH3month)
+library(psych)
 describe(Goal3ObjectiveHBaseMonth3)
 Goal3ObjectiveHBaseMonth3 =  data.frame(t(colMeans(Goal3ObjectiveHBaseMonth3)))
 colnames(Goal3ObjectiveHBaseMonth3) = c("Base", "Month3")
 Goal3ObjectiveHBaseMonth3$Difference = round((Goal3ObjectiveHBaseMonth3$Month3-Goal3ObjectiveHBaseMonth3$Base)/Goal3ObjectiveHBaseMonth3$Base,2)
-write.csv(Goal3ObjectiveHBaseMonth3, "Goal3ObjectiveHBaseMonth3.csv", row.names = FALSE)
 
 
 ####################### Objective I ################ ################ ################ ################ ################ ################ ##############
@@ -408,7 +283,6 @@ Goal3ObjectiveKBaseMonth3 =  data.frame(t(colMeans(Goal3ObjectiveKBaseMonth3)))
 colnames(Goal3ObjectiveKBaseMonth3) = c("Base", "Month3")
 Goal3ObjectiveKBaseMonth3$Difference = round((Goal3ObjectiveKBaseMonth3$Month3-Goal3ObjectiveKBaseMonth3$Base)/Goal3ObjectiveKBaseMonth3$Base,2)
 Goal3ObjectiveKBaseMonth3 = round(Goal3ObjectiveKBaseMonth3,2)
-write.csv(Goal3ObjectiveKBaseMonth3, "Goal3ObjectiveKBaseMonth3.csv", row.names = FALSE)
 
 ##### Objective L ########################## ###############################################################################################################################
 ## STDHx and subset by year if any data and then compare by year.  No year so need to merge the GPRA with pocket then grab year from GPRA with the one variable here
@@ -428,7 +302,6 @@ count(Goal3ObjectiveMBaseMonth3$Month3)
 Goal3ObjectiveMBaseMonth3 = data.frame(t(colMeans(Goal3ObjectiveMBaseMonth3)))
 Goal3ObjectiveMBaseMonth3$Difference = (Goal3ObjectiveMBaseMonth3$Month3-Goal3ObjectiveMBaseMonth3$Base) / Goal3ObjectiveMBaseMonth3$Base
 Goal3ObjectiveMBaseMonth3 = round(Goal3ObjectiveMBaseMonth3, 2)
-write.csv(Goal3ObjectiveMBaseMonth3, "Goal3ObjectiveMBaseMonth3.csv", row.names = FALSE)
 
 
 ####### Goal 3 Objective M ########################################### ########################################### ###########################################
@@ -439,15 +312,7 @@ write.csv(Goal3ObjectiveMBaseMonth3, "Goal3ObjectiveMBaseMonth3.csv", row.names 
 Goal3ObjectiveMBaseMonth3 = read.csv("Goal3ObjectiveMBaseMonth3.csv", header = TRUE, na.strings = c(NA, 98, 99))
 Goal3ObjectiveMBaseMonth3 = na.omit(Goal3ObjectiveMBaseMonth3)
 apply(Goal3ObjectiveMBaseMonth3, 2, sum)
-##### CCPE Grant Summary Report Data ######## ########################################################################################
-##### Project Objectives ################### ###############################################################################################
-InternAdult = data.frame(gpraAdultAll$YEAR.x, gpraAdultAll$INTERVENTION_A.x, gpraAdultAll$INTERVENTION_B.x, gpraAdultAll$INTERVENTION_C.x)
-RapidAdult = data.frame(subset(InternAdult, gpraAdultAll.INTERVENTION_A.x ==78 | gpraAdultAll.INTERVENTION_B.x == 78 | gpraAdultAll.INTERVENTION_C.x == 78))
-summary(RapidAdult)
-RapidAdult = data.frame(subset(RapidAdult, gpraAdultAll.YEAR.x == 2017))
-RapidAdult = dim(RapidAdult)
-RapidAdult = RapidAdult[1]
-RapidAdult 
+##### CCPE Grant Summary Report Data ######## #########################################################
 
 # For Increase confidence in assertive communication skills see Goal 3 Objective I SIS 
 # For Increase knowledge about HIV and substance abuse and decrease risky behaviors that could lead to HIV/AIDS and substance abuse.  																			
@@ -458,6 +323,7 @@ RapidAdult
 # Current enrollment totalCCPE to tracking sheet
 # Gender Male = 1; Female = 2; Other Gender Identity 3 and 4 
 library(plyr)
+library(prettyR)
 gender = data.frame(gpraAdultAll$GENDER.x)
 describe.factor(gender)
 
