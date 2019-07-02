@@ -10,49 +10,24 @@ Library some packages
 ```{r}
 library(psych)
 library(prettyR)
-####CCPE New GPRA
-setwd("S:/Indiana Research & Evaluation/CCPE/NewGPRAData")
-base = read.csv("baseline.csv", header = TRUE, na.strings = c(-99, -98, -97))
-month3 = read.csv("month6.csv", header = TRUE, na.strings = c(-99, -98, -97))
 ```
 
-
-Cleaning data need to merge them
+So far this reporting period, how many people received an HIV test using funds from this grant?
+We only collect data on those who get HIV tested so everyone in the baseline
+Need to subset for data in the future ok with data set only those starting in April included.
 ```{r}
-base$ID= base$participant_id
-month3$ID = month3$redcap_survey_identifier
-matchedDat = merge(base, month3, by = "ID", all.y = TRUE)
-## Dim Check
-dim(month3)
-dim(matchedDat)
-### ID Check
-month3 = month3[order(month3$ID),]
-matchedDat = matchedDat[order(matchedDat$ID),]
-matchedDat$ID == month3$ID
+#setwd("S:/Indiana Research & Evaluation/CCPE/NewGPRAData")
+#base = read.csv("baseline.csv", header = TRUE, na.strings = c(-99, -98, -97))
+dim(base)
 ```
-Goal Three Objective A: Increase knowledge about SA by 20%.
-
-know_sa
-Would you know where to go near where you live to see a health care professional regarding a drug or alcohol problem?
-Yes = 1
-No = 0
+Demographics
+How do you describe yourself? 
+1, Male
+2, Female
+3, Transgender
+5, I do not identify as male, female, or transgender
 ```{r}
-G3OA = data.frame(SABase = matchedDat$know_sa.x, SAMonth3 = matchedDat$know_sa.y)
-dim(G3OA)
-G3OAComplete = na.omit(G3OA)
-dim(G3OAComplete)
-describe(G3OAComplete)
-describe.factor(G3OAComplete$SABase)
-describe.factor(G3OAComplete$SAMonth3)
-
-
-SABaseMean = round(mean(G3OAComplete$SABase),3)
-SAMonth3Mean = round(mean(G3OAComplete$SAMonth3),3)
-G3OA_p_change = round((SAMonth3Mean - SABaseMean)/ SABaseMean,3)
-
-
-G3OA_results = data.frame(N = dim(G3OAComplete)[1], SABaseMean, SAMonth3Mean, G3OA_p_change)
-G3OA_results
+describe.factor(matchedDat$gender.x)
 ```
 Demographics
 
