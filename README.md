@@ -10,21 +10,25 @@ Library some packages
 ```{r}
 library(psych)
 library(prettyR)
+####CCPE New GPRA
+setwd("S:/Indiana Research & Evaluation/CCPE/NewGPRAData")
+base = read.csv("baseline.csv", header = TRUE, na.strings = c(-99, -98, -97))
+month3 = read.csv("month6.csv", header = TRUE, na.strings = c(-99, -98, -97))
 ```
 
 
 Cleaning data need to merge them
 ```{r}
 base$ID= base$participant_id
-month6$ID = month6$redcap_survey_identifier
-matchedDat = merge(base, month6, by = "ID", all.y = TRUE)
+month3$ID = month3$redcap_survey_identifier
+matchedDat = merge(base, month3, by = "ID", all.y = TRUE)
 ## Dim Check
-dim(month6)
+dim(month3)
 dim(matchedDat)
 ### ID Check
-month6 = month6[order(month6$ID),]
+month3 = month3[order(month3$ID),]
 matchedDat = matchedDat[order(matchedDat$ID),]
-matchedDat$ID == month6$ID
+matchedDat$ID == month3$ID
 ```
 Goal Three Objective A: Increase knowledge about SA by 20%.
 
@@ -45,6 +49,7 @@ describe.factor(G3OAComplete$SAMonth3)
 SABaseMean = round(mean(G3OAComplete$SABase),3)
 SAMonth3Mean = round(mean(G3OAComplete$SAMonth3),3)
 G3OA_p_change = round((SAMonth3Mean - SABaseMean)/ SABaseMean,3)
+
 
 G3OA_results = data.frame(N = dim(G3OAComplete)[1], SABaseMean, SAMonth3Mean, G3OA_p_change)
 G3OA_results
